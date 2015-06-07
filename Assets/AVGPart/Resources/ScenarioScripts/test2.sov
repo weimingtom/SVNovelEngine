@@ -1,0 +1,82 @@
+[enterscene name=Schoolgate destroy=true fade=true]
+[wait time=1000]
+
+[cm]
+[current layer=TextBox]
+
+[enteractor name=Sachi position=center fade=true]
+
+
+[settext text=Sachi textbox=TextBox_Name]
+Nice to meet you.[r]
+
+[settext text=Sachi textbox=TextBox_Name]
+Hi ! My name is Sachi.[p]
+
+Let's change her face.[p]
+
+[changestate name=Sachi state=Smile fade=true]
+
+Shake TextBox[p]
+
+[shake name=TextBox]
+
+
+[moveactor name=Sachi position=left]
+
+
+[enteractor name=Yoshino position=right fade=true]
+
+
+[settext text=Yoshino textbox=TextBox_Name]
+Hi , Sachi.[p]
+
+Change the message Target.[p]
+
+[cm]
+[current layer=TextBox_BG]
+
+The Message target has changed to the TextBox_BG.[p]
+
+Return to the Original Target.[p]
+
+[cm]
+[current layer=TextBox]
+
+The Message Target has returned to the original Target.[p]
+
+You can also display options.[p]
+
+*select_niko
+
+[select_new  target=*select_a1]Nico~[end]
+[select_new  target=*select_a2]Maki~[end]
+[select_show]
+
+[s]
+
+*select_a1
+[settext text=Nico textbox=TextBox_Name]
+にっこにっこにー☆[r]
+あなたのハートににこにこにー♪ [r]
+笑顏届ける矢澤にこにこー♪[p]
+にこにーって覚えてラブにこー♪[r]
+ダメダメダメにこにーはみんなのもっの♪[p]
+
+[jump target=*select_niko]
+
+*select_a2
+[settext text=Maki textbox=TextBox_Name]
+まっきまっきまー☆[r]
+ちょっと口が悪いけど、[l]
+ほんとは優しい、[l]
+真姫ちゃんですっ！[p]
+Хорошо![p]
+
+[jump target=*select_niko]
+
+[cm]
+[current layer=TextBox]
+
+Finish this demo.[p]
+
