@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using Sov.VGF.Utils;
+
 /*
  * phrase the string into words
  * return words

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Sov.VGF.Utils
+namespace Sov.AVGPart
 {
     public class StringUtil
     {
@@ -71,6 +71,16 @@ namespace Sov.VGF.Utils
         {
             int npos = 0;
             return NextString(str, pos, out npos);
+        }
+
+        /*
+         * 首字母大写
+         */
+        static public string ToTitleCapital(string str)
+        {
+            StringBuilder sb = new StringBuilder(str);
+            sb[0] = Char.ToUpper(sb[0]);
+            return sb.ToString();
         }
     }
 }

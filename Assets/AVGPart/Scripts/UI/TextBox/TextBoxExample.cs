@@ -34,6 +34,7 @@ namespace Sov.AVGPart
                     break;
             }
         }*/
+
         //待显示的文字
         string _textToShow = "";
  

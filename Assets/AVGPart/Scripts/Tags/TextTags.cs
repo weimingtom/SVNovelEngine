@@ -9,10 +9,13 @@ namespace Sov.AVGPart
     /*
      * tag = print
      * 
-     * [desc]
+     * <desc>
      * 设置主文本框中的语句
      * 
-     * [sample]
+     * <param>
+     * @text:   待显示的文本
+     * 
+     * <example>
      * Hello,World[p]
      */
     public class PrintTag : AbstractTag
@@ -41,10 +44,14 @@ namespace Sov.AVGPart
     /*
      * tag = settext
      *
-     * [desc]
+     * <desc>
      * 设置文本框内的语句
      * 
-     * [sample]
+     * <param>
+     * @text:       待显示的文本
+     * @textbox:    文本框名称
+     * 
+     * <example>
      * [settext text=Sachi textbox=TextBox_Name]
      */
     public  class SettextTag : AbstractTag
@@ -72,10 +79,13 @@ namespace Sov.AVGPart
     /*
      * tag = current
      * 
-     * [desc]
+     * <desc>
      * 切换当前显示的主文本框
      * 
-     * [sample]
+     * <param>
+     * @layer:  主文本框名称
+     * 
+     * <example>
      * [current layer=TextBox]
      * 
      */
@@ -103,10 +113,10 @@ namespace Sov.AVGPart
     /*
      * tag = l
      * 
-     * [desc]
+     * <desc>
      * 暂停等待继续
      * 
-     * [sample]
+     * <example>
      * Hi,World.[l]
      */
     public class LTag: AbstractTag
@@ -132,10 +142,10 @@ namespace Sov.AVGPart
     /*
      * tag = cm
      * 
-     * [desc]
+     * <desc>
      * 清除主文本框中的文字
      * 
-     * [sample]
+     * <example>
      * [cm]
      * 
      */
@@ -158,10 +168,10 @@ namespace Sov.AVGPart
     /*
      * tag = p
      * 
-     * [desc]
+     * <desc>
      * 清除当前文本框内容并显示新的文本
      * 
-     * [sample]
+     * <example>
      * Hello,World[p]
      * 
      */
@@ -197,11 +207,11 @@ namespace Sov.AVGPart
     /*
      * tag = r
      * 
-     * [desc]
+     * <desc>
      * 在当前文本框显示基础上换行显示新文本
      * 默认为[r]
      * 
-     * [sample]
+     * <example>
      * Hello,World[r]
      * 
      */

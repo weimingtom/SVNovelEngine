@@ -24,7 +24,7 @@ namespace Sov.AVGPart
                 if (_sharedTextBoxesManager == null)
                 {
                     Debug.Log("Do not have TextBoxManager");
-                    
+             
                 }
                 return _sharedTextBoxesManager;
             }

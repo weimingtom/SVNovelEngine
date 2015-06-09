@@ -157,6 +157,11 @@ namespace Sov.AVGPart
         {
             Engine.NextCommand();
         }
+
+        public virtual void OnFinishAnimation()
+        {
+
+        }
     }
 
     class TagFactory

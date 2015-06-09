@@ -9,10 +9,10 @@ namespace Sov.AVGPart
     /*
      * tag = scenario
      * 
-     * [desc]
+     * <desc>
      *  记录以下内容为一个新片段，供跳转等实现
      *  
-     * [sample]
+     * <example>
      * *Demonstration(English)/START/1_Dialog
      * 
      */
@@ -47,10 +47,10 @@ namespace Sov.AVGPart
     /*
      * tag = s
      * 
-     * [desc]
+     * <desc>
      * 脚本运行到此处时停止
      * 
-     * [sample]
+     * <example>
      * 
      * [select num = 2]
      * [select_new  target=*select_a1]View from the beginning.[end]
@@ -76,6 +76,17 @@ namespace Sov.AVGPart
         }
     }
 
+    /*
+     * tag = select_new
+     * 
+     * <desc>
+     * 显示脚本前面[select_new]的选择肢
+     * 
+     * <example>
+     * [select_show]
+     * 
+     */
+
     public class Select_showTag: AbstractTag
     {
         public Select_showTag()
@@ -94,6 +105,20 @@ namespace Sov.AVGPart
         }
     }
 
+    /*
+     * tag = select_new
+     * 
+     * <desc>
+     * 创建新的选择肢
+     * 
+     * <param>
+     * @target: 点击后跳转的Scenario标签
+     * @text:   标签上显示的文字
+     * 
+     * <example>
+     * [select_new  target=*select_a1]Nico~[end]
+     * 
+     */
     public class Select_newTag: AbstractTag
     {
         public Select_newTag()
@@ -122,6 +147,21 @@ namespace Sov.AVGPart
         }
 
     }
+
+    /*
+     * tag = jump
+     * 
+     * <desc>
+     * 跳转到Param["target"]的Scenario处
+     * 
+     * <param>
+     * @target: Target scenario to jump
+     * 
+     * <example>
+     * *select_niko
+     * [jump target=*select_niko]
+     * 
+     */
 
     public class JumpTag : AbstractTag
     {

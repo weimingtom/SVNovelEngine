@@ -1,4 +1,5 @@
-[enterscene name=Schoolgate destroy=true fade=true]
+[bg_change name=classroom fade=true fadetime=2]
+
 [wait time=1000]
 
 [cm]

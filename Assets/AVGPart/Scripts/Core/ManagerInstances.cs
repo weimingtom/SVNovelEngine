@@ -49,5 +49,18 @@ namespace Sov.AVGPart
             }
         }
 
+        ImageManager _sharedImageManager = null;
+        public ImageManager ImageManager
+        {
+            get
+            {
+                if (_sharedImageManager == null)
+                {
+                    _sharedImageManager = new ImageManager();
+                }
+                return _sharedImageManager;
+            }
+        }
+
     }
 }

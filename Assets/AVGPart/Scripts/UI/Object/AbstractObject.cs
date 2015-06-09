@@ -18,7 +18,7 @@ namespace Sov.AVGPart
          * 定义元素的位置
          */
 
-        public  GameObject Go;
+        public GameObject Go;
 
         protected abstract class AbPosition
         {

@@ -11,6 +11,6 @@ namespace Sov.AVGPart
         public static string SCENARIO_SCRIPT_PATH = "/AVGPart/Resources/ScenarioScripts/";
         public static string PREFAB_PATH = "Prefab/";
         public static string UI_IMAGE_PATH = "UImage/";
-
+        public static string BG_IMAGE_PATH = "BG/";
     }
 }
