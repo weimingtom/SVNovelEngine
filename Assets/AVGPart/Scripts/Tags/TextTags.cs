@@ -77,6 +77,35 @@ namespace Sov.AVGPart
     }
 
     /*
+     * tag = setname
+     *
+     * <desc>
+     * 显示人名
+     *  
+     * <example>
+     * #Sachi
+     */
+    public class SetnameTag : AbstractTag
+    {
+        public SetnameTag()
+        {
+            _vitalParams = new List<string> {
+                "text"
+            };
+
+            _defaultParamSet = new Dictionary<string, string>() {
+                { "text",    ""},
+            };
+        }
+
+        public override void Excute()
+        {
+            TextBoxesManager.Instance.SetName(Params["text"]);
+            base.Excute();
+        }
+    }
+
+    /*
      * tag = current
      * 
      * <desc>
@@ -109,6 +138,54 @@ namespace Sov.AVGPart
             base.Excute();
         }
     }
+    /*
+     * tag = reg_textbox
+     * 
+     * <desc>
+     * 绑定textbox
+     * 
+     * <param>
+     * @objname:     
+     * @type:       
+     * 
+     * <example>
+     * [reg_textbox objname=TextBox_Name type=name]
+     * 
+     */
+    public class Reg_textboxTag: AbstractTag
+    {
+        public Reg_textboxTag()
+        {
+            _defaultParamSet = new Dictionary<string, string>() {
+                { "objname", "" },
+                { "type",    "main"}  
+            };
+            _vitalParams = new List<string>() {
+                "objname"
+            };
+        }
+
+        public override void Excute()
+        {
+            Debug.Log("[Register TextBox]");
+            base.Excute();
+            TextBox t = Instances.Instance.TextBoxesManager.GetTextBoxInScene(Params["objname"]);
+            if(t == null)
+            {
+                Debug.LogFormat("Can not register TestBox");
+                return;
+            }
+            if (Params["type"] == "main")
+            {
+                Instances.Instance.TextBoxesManager.CurrentMainTextBox = t;
+            }
+            else if (Params["type"] == "name")
+            {
+                Instances.Instance.TextBoxesManager.CurrentNameTextBox = t;
+            }
+        } 
+    }
+
     /* ********************* Message Tag ******************* */
     /*
      * tag = l

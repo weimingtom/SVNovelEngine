@@ -15,12 +15,12 @@ namespace Sov.AVGPart
      * <param>
      * @name:       图片名称
      * @objname:    GameObject的name, 全部小写
-     * @storage:    文件在"Resources/"下的相对路径
+     * @path:    文件在"Resources/"下的相对路径
      * @fade:       是否渐变显示
      * @fadetime:   渐变时间
      * 
      * <example>
-     * [image_change name=background storage=room_tall fade=true]
+     * [image_change name=background path=room_tall fade=true]
      */
 
     class Image_changeTag: AbstractTag
@@ -30,21 +30,21 @@ namespace Sov.AVGPart
             _defaultParamSet = new Dictionary<string, string>() {
                 { "objname",    ""},
                 { "name",       "" },
-                { "storage",    "" },
+                { "path",    "" },
                 { "fade",       "false" },
                 { "fadetime",   "0.5" } 
             };
             _vitalParams = new List<string>() {
                 "name",
                 "objname",
-                "storage"
+                "path"
             };
         }
 
         public override void Excute()
         {
             string objName = Params["objname"];
-            string storage = Params["storage"] + Params["name"];
+            string path = Params["path"] + Params["name"];
             Engine.Status.EnableNextCommand = false;
 
             ImageObject io = Instances.Instance.ImageManager.GetImageObjectInScene(objName);
@@ -53,13 +53,13 @@ namespace Sov.AVGPart
             {
                 //等待动画结束函数回调继续执行
                 Instances.Instance.ImageManager.ChangeImageWithFade(io,
-                                                                   storage,
+                                                                   path,
                                                            float.Parse(Params["fadetime"]));
             }
             else
             {
                 Engine.Status.EnableNextCommand = true;
-                Instances.Instance.ImageManager.ChangeImageWithoutFade(io, storage);
+                Instances.Instance.ImageManager.ChangeImageWithoutFade(io, path);
             }
             
 
@@ -72,12 +72,20 @@ namespace Sov.AVGPart
         }
         public override void OnFinishAnimation()
         {
-            Debug.Log("Finish Animation!");
             if (Params["fade"] == "true")
             {
+                Debug.Log("Finish Animation!");
                 Engine.Status.EnableNextCommand = true;
                 Engine.NextCommand();
             }
         }
     }
+
+    /*
+     * tag = image_new
+     * 
+     * <desc>
+     * 创建并显示新的图片
+     * 
+     */ 
 }

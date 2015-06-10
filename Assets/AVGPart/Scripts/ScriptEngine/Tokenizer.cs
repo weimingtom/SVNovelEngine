@@ -14,6 +14,13 @@ using UnityEngine;
  * Text:	 Nice to meet you.[p]
  * 
  * see [p][r] as a tag 
+ * 
+ * add:
+ * · use '@' to set tag. Now you can use @ or [] to set tag
+ *   e.g. @enterscene name=Schoolgate destroy=true fade=true
+ * · use '//' to set commit
+ * · use '#' to print name text conveniently. instead of [settext]
+ *   e.g. #Sachi 
  */
 
 #if UNIT_TEST
@@ -58,7 +65,17 @@ namespace Sov.AVGPart
                 ReadScenario();
                 return _words;
             }
-
+            else if(_line[_pos] == '#')
+            {
+              //  ++_pos;
+                ReadName();
+                return _words;
+            }
+            else if(_line[0] == '/' && _line[1] == '/')
+            {
+                //Commit, Do Nothing
+                return null;
+            }
 
             while (true)
             {
@@ -66,7 +83,7 @@ namespace Sov.AVGPart
                 {
                     break;
                 }
-                else if (_line[_pos] == '[')
+                else if (_line[_pos] == '[' || _line[_pos] == '@')
                 {
                     ChangeReadMode(Mode.TAG);
                     ++_pos;
@@ -183,6 +200,7 @@ namespace Sov.AVGPart
         {
             int npos = 0;
             //	CCLOG("read Text!");
+
             string str = StringUtil.NextStringStopUntil(_line, "[\n", _pos, out npos);
 
             //auto str = nextString("[\n", &npos);
@@ -200,6 +218,24 @@ namespace Sov.AVGPart
             ChangeReadMode(Mode.TAG);
         }
 
+        private void ReadName()
+        {
+            int npos = 0;
+
+            KAGWord tag1;
+
+            if (_line == "#")   //No Name
+            {
+                tag1 = new KAGWord(KAGWord.Type.NAME, "text", "");
+            }
+            else
+            {
+                string str = StringUtil.NextStringStopUntil(_line, "[\n", _pos+1, out npos);
+                tag1 = new KAGWord(KAGWord.Type.NAME, "text", str);
+            }
+
+            _words.Add(tag1);
+        }
         private void ReadScenario()
         {
             int npos = 0;
@@ -210,7 +246,7 @@ namespace Sov.AVGPart
             _words.Add(op);
             _words.Add(tag);
         }
-
+        
         private string NextString(out int npos)
         {
             string s = StringUtil.NextString(_line, _pos, out npos);

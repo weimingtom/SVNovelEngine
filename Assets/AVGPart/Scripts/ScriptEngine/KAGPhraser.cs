@@ -38,7 +38,10 @@ namespace Sov.AVGPart
                 }
                     
                 KAGWords l = _tokenizer.GetToken(str);
-                PhraseALine(l);
+                if (l != null)
+                {
+                    PhraseALine(l);
+                }
                 _currentPhraseLineNo++;
             }
         }
@@ -100,7 +103,16 @@ namespace Sov.AVGPart
                 Debug.LogFormat("Tag:{0} is not implemented!", tagInfo.TagName);
              */
             KAGWord op = line[0];
-            if (op.WordType != KAGWord.Type.TEXT)
+            if (op.WordType == KAGWord.Type.TEXT)
+            {
+                PhraseText(line);
+                
+            }
+            else if(op.WordType == KAGWord.Type.NAME)
+            {
+                PhraseName(line);
+            }
+            else
             {
                 TagInfo tagInfo = new TagInfo(op.Value.ToLower());
                 foreach (KAGWord param in line)
@@ -111,10 +123,6 @@ namespace Sov.AVGPart
                     }
                 }
                 CreateAndSendTagToEngine(tagInfo);
-            }
-            else
-            {
-                PhraseText(line);
             }
         }
 
@@ -164,7 +172,21 @@ namespace Sov.AVGPart
                 }
             }
         }
+        
+        void PhraseName(KAGWords line)
+        {
+            TagInfo tagInfo = new TagInfo("setname");
 
+            foreach (KAGWord word in line)
+            {
+                string name = word.Name;
+                if (name == "text")
+                {
+                    tagInfo.Params["text"] = word.Value;
+                    CreateAndSendTagToEngine(tagInfo);
+                }
+            }
+        }
         void CreateAndSendTagToEngine(TagInfo tagInfo)
         {
             AbstractTag tag = TagFactory.Create(tagInfo, _currentPhraseLineNo);

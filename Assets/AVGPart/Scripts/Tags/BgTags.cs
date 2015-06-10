@@ -15,12 +15,12 @@ namespace Sov.AVGPart
      * <param>
      * @name:       图片名称
      * @objname:    GameObject的name, 全部小写
-     * @storage:    Settings.BK_IMAGE_PATH下的相对路径
+     * @path:       Settings.BK_IMAGE_PATH下的相对路径
      * @fade:       是否渐变显示
      * @fadetime:   渐变时间
      * 
      * <example>
-     * [bg_change name=background storage=room_tall fade=true]
+     * [bg_change name=background path=room_tall fade=true]
      *
      */
     class Bg_changeTag : Image_changeTag
@@ -35,14 +35,14 @@ namespace Sov.AVGPart
         {
             Debug.Log("[bg_change]");
             //之前填入参数 参数都有且为默认值
-            if (Params["storage"] != "")
+            if (Params["path"] != "")
             {
-                string s = Params["storage"];
-                Params["storage"] = Settings.BG_IMAGE_PATH + s;
+                string s = Params["path"];
+                Params["path"] = Settings.BG_IMAGE_PATH + s;
             }
             else
             {
-                Params["storage"] = Settings.BG_IMAGE_PATH;
+                Params["path"] = Settings.BG_IMAGE_PATH;
             }
 
             if (Params["objname"] == "")

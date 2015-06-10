@@ -1,37 +1,35 @@
+[reg_textbox objname=Main type=main]
+[reg_textbox objname=Name type=name]
+
 [bg_change name=classroom fade=true fadetime=2]
 
-[wait time=1000]
-
 [cm]
-[current layer=TextBox]
 
 [enteractor name=Sachi position=center fade=true]
 
-
-[settext text=Sachi textbox=TextBox_Name]
+#Sachi
 Nice to meet you.[r]
 
-[settext text=Sachi textbox=TextBox_Name]
+#Sachi
 Hi ! My name is Sachi.[p]
 
+#
 Let's change her face.[p]
 
 [changestate name=Sachi state=Smile fade=true]
 
-Shake TextBox[p]
+Shake TextBox[p]  
 
 [shake name=TextBox]
 
-
 [moveactor name=Sachi position=left]
-
 
 [enteractor name=Yoshino position=right fade=true]
 
-
-[settext text=Yoshino textbox=TextBox_Name]
+#Yoshino
 Hi , Sachi.[p]
 
+#
 Change the message Target.[p]
 
 [cm]
@@ -57,7 +55,8 @@ You can also display options.[p]
 [s]
 
 *select_a1
-[settext text=Nico textbox=TextBox_Name]
+
+#Nico
 にっこにっこにー☆[r]
 あなたのハートににこにこにー♪ [r]
 笑顏届ける矢澤にこにこー♪[p]
@@ -67,7 +66,8 @@ You can also display options.[p]
 [jump target=*select_niko]
 
 *select_a2
-[settext text=Maki textbox=TextBox_Name]
+
+#Maki
 まっきまっきまー☆[r]
 ちょっと口が悪いけど、[l]
 ほんとは優しい、[l]
@@ -77,7 +77,6 @@ You can also display options.[p]
 [jump target=*select_niko]
 
 [cm]
-[current layer=TextBox]
 
+#
 Finish this demo.[p]
-

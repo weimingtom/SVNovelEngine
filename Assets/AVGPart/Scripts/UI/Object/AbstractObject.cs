@@ -22,7 +22,7 @@ namespace Sov.AVGPart
 
         protected abstract class AbPosition
         {
-
+           
         }
 
         public virtual void SetPosition3D(float x, float y, float z)

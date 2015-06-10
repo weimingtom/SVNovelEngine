@@ -186,4 +186,50 @@ namespace Sov.AVGPart
             //base.After();
         }
     }
+
+    /*
+     * tag = wait
+     * 
+     * <desc>
+     * 暂停指定时间后继续
+     * 
+     * <param>
+     * @time:   需要等待的时间，单位为秒
+     * 
+     * <example>
+     * [wait time=1000]
+     * 
+     */
+    public class WaitTag: AbstractTag
+    {
+        public WaitTag()
+        {
+            _defaultParamSet = new Dictionary<string, string>() {
+                { "time", "0"}
+            };
+
+            _vitalParams = new List<string>() {
+                "time"
+            };
+        }
+
+        public override void Excute()
+        {
+            Debug.LogFormat("Wait: {0}ms", Params["time"]);
+            Engine.Status.EnableNextCommand = false;
+            Engine.StartCoroutine(Util.DelayToInvoke(this.OnFinishAnimation, int.Parse(Params["time"]) / 1000f));
+        }
+
+        public override void After()
+        {
+            //Do Nothing
+        }
+
+        public override void OnFinishAnimation()
+        {
+            Debug.Log("Wait Finish!");
+            Engine.Status.EnableNextCommand = true;
+            Engine.NextCommand();
+        }
+    }
 }

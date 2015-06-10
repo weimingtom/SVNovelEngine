@@ -21,7 +21,8 @@ namespace Sov.AVGPart
             TAG,
             ATTRIBUTE,
             TEXT,
-            SCENARIO
+            SCENARIO,
+            NAME
         }
 
         public KAGWord(Type type, string attribute, string value)

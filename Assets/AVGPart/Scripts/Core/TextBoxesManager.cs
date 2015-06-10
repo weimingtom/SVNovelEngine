@@ -30,7 +30,7 @@ namespace Sov.AVGPart
             }
         }
 
-        public TextBox GetCurrentMainTextBox() { return _currentMainTextBox; }
+        //public TextBox GetCurrentMainTextBox() { return _currentMainTextBox; }
 
         void Awake()
         {
@@ -56,7 +56,7 @@ namespace Sov.AVGPart
             MessageDispatcher.Instance.RegisterMessageListener(hideMsgBoxListener);
 
             _textBoxes = new Dictionary<string, TextBox>();
-            _currentMainTextBox = TextBoxesInScene[0];
+            CurrentMainTextBox = TextBoxesInScene[0];
             RegisterTextBoxesInScene();
         }
 
@@ -77,7 +77,37 @@ namespace Sov.AVGPart
         Dictionary<string, TextBox> _textBoxes;
 
 
-        TextBox _currentMainTextBox;
+        public TextBox CurrentMainTextBox
+        {
+            get;
+            set;
+        }
+
+        public TextBox CurrentNameTextBox
+        {
+            get;
+            set;
+        }
+
+        public TextBox GetTextBoxInScene(string name)
+        {
+            foreach(TextBox t in TextBoxesInScene)
+            {
+                if(t.name == name)
+                {
+                    return t;
+                }
+            }
+            GameObject go =  GameObject.Find(name);
+            if(go == null)
+            {
+                return null;
+            }
+            else
+            {
+                return go.GetComponent<TextBox>();
+            }
+        }
 
         //TextBox Click Event
         public void OnClickNextMessage()
@@ -102,7 +132,17 @@ namespace Sov.AVGPart
             }
 
         }
+        public void SetName(string text)
+        {
+            Debug.LogFormat("[SetName]:{0}", text);
 
+            TextBox textbox = CurrentNameTextBox;
+            if (CurrentNameTextBox)
+            {
+                textbox.ClearMessage();
+                textbox.SetText(text);
+            }
+        }
         void OnSetText(Message pEvent)
         {
             Debug.Log("on Set Text");
@@ -126,7 +166,7 @@ namespace Sov.AVGPart
 
             string text = data["text"];
 
-            _currentMainTextBox.SetText(text);
+            CurrentMainTextBox.SetText(text);
         }
 
         void OnPrintText(Message pEvent)
@@ -136,7 +176,7 @@ namespace Sov.AVGPart
 
             string text = data.Params["text"];
 
-            _currentMainTextBox.SetText(text);
+            CurrentMainTextBox.SetText(text);
         }
 
         //hide messagebox
@@ -188,8 +228,8 @@ namespace Sov.AVGPart
                 if (_textBoxes.ContainsKey(layer))
                 {
                     Debug.LogFormat("change main textbox to: {0}", layer);
-                    _currentMainTextBox = _textBoxes[layer];
-                    _currentMainTextBox.SetVisible(true);
+                    CurrentMainTextBox = _textBoxes[layer];
+                    CurrentMainTextBox.SetVisible(true);
                 }
                 else
                 {
@@ -213,8 +253,8 @@ namespace Sov.AVGPart
                 if (_textBoxes.ContainsKey(layer))
                 {
                     Debug.LogFormat("change main textbox to: {0}", layer);
-                    _currentMainTextBox = _textBoxes[layer];
-                    _currentMainTextBox.SetVisible(true);
+                    CurrentMainTextBox = _textBoxes[layer];
+                    CurrentMainTextBox.SetVisible(true);
                 }
                 else
                 {
@@ -230,18 +270,18 @@ namespace Sov.AVGPart
         //Tag: [CM]
         public void ClearMessage(Dictionary<string, string> data)
         {
-            _currentMainTextBox.ClearMessage();
+            CurrentMainTextBox.ClearMessage();
         }
 
         void OnClearMessage(Message message)
         {
-            _currentMainTextBox.ClearMessage();
+            CurrentMainTextBox.ClearMessage();
         }
 
         //Tag: [r]
         public void Reline()
         {
-            _currentMainTextBox.Reline();
+            CurrentMainTextBox.Reline();
         }
         #endregion
 
