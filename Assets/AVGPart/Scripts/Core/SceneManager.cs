@@ -1,10 +1,55 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Sov.AVGPart
 {
     public class SceneManager
     {
+        static SceneManager _sharedSceneManager = null;
+        public static SceneManager Instance
+        {
+            get
+            {
+                if (_sharedSceneManager == null)
+                {
+                    _sharedSceneManager = new SceneManager();
+                }
+                return _sharedSceneManager;
+            }
+        }
+
+        SceneManager()
+        {
+            _objectInScene = new Dictionary<string, AbstractObject>();
+        }
+
+        Dictionary<string, AbstractObject> _objectInScene;
+
+        public TObject CreateObject<TObject, TInfo>(TInfo info)
+            where TObject: AbstractObject, new()
+            where TInfo:   ObjectInfo
+        {
+            TObject obj = new TObject();
+            obj.Init(info);
+
+            _objectInScene.Add(info.Name, obj);
+            return obj;
+
+        }
+
+        public TObject GetCreatedObject<TObject>(string name)
+            where TObject: AbstractObject
+        {
+            if (!_objectInScene.ContainsKey(name))
+                return default(TObject);
+            else
+            {
+                AbstractObject ao = _objectInScene[name];
+                return (TObject)ao;
+            }
+        }
+
         // Use this for initialization
         void Start()
         {

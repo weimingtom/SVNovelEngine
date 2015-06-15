@@ -6,28 +6,50 @@ using UnityEngine;
 
 namespace Sov.AVGPart
 {
+    public abstract class ObjectInfo
+    {
+        public string Name = "";
+    }
+
     /*
      * AbstractObject
      * 
      * 引擎通过这个创建UI元素
      * 
      */
-    class AbstractObject
+    public class AbstractObject
     {
         /*
          * 定义元素的位置
          */
+        public AbstractObject()
+        {
+
+        }
+
 
         public GameObject Go;
 
-        protected abstract class AbPosition
+        public Action OnAnimationFinish
         {
-           
+            protected get;
+            set;
+        }
+
+        public virtual void Init(ObjectInfo info)
+        {
+
         }
 
         public virtual void SetPosition3D(float x, float y, float z)
         {
+           
             Go.transform.position = new Vector3(x, y, z);
+        }
+
+        public virtual void SetPosition3D(Vector3 p)
+        {
+            Go.transform.position = p;
         }
 
         public virtual void SetPosition2D(float x, float y)
@@ -36,6 +58,23 @@ namespace Sov.AVGPart
             Go.transform.position = new Vector3(x, y, v3.z);
         }
 
-        //public void SetPosition(A)
+        public virtual void SetParent(string name)
+        {
+            GameObject p =  GameObject.Find(name);
+            if(p == null)
+            {
+                Debug.LogFormat("Can not find Parent:{0}", name);
+                return;
+            }
+            Go.transform.SetParent(p.transform);
+        }
+        public virtual void FadeIn(float fadetime)
+        {
+
+        }
+        public virtual void FadeOut(float fadetime)
+        {
+
+        }
     }
 }

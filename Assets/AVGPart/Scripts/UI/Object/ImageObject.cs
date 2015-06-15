@@ -11,7 +11,7 @@ namespace Sov.AVGPart
     class ImageObject:AbstractObject
     {
         Image _image;
-
+        ImageInfo _info;
         /*
         public ImageObject(string objectName)
         {
@@ -23,11 +23,9 @@ namespace Sov.AVGPart
             
         }
 
-        public Action OnAnimationFinish
-        {
-            private get;
-            set;
-        }
+        
+
+        #region Factory
         public static ImageObject CreateWithSceneObject(string objectName)
         {
             ImageObject io = new ImageObject();
@@ -57,18 +55,83 @@ namespace Sov.AVGPart
             return io;
         }
 
+        public static ImageObject CreateWithNewImage(ImageInfo info)
+        {
+            GameObject go = Resources.Load<GameObject>(info.Path + info.Name);
+            go = GameObject.Instantiate(go);
+            //create image
+            Sprite i = Resources.Load<Sprite>(info.Path + info.Name);
+            if (i == null)
+            {
+                Debug.LogFormat("Cannot load image file:{0}", info.Path + info.Name);
+            }
+            return go.GetComponent<ImageObject>();
+        }
+
+        public static ImageObject CreateWithInfo(ImageInfo info)
+        {
+            /*
+            ImageObject io = new ImageObject();
+
+            io.Go = new GameObject(info.ObjName);
+
+            io.SetPosition3D(info.Position);
+
+            io._image = io.Go.AddComponent<Image>();
+            */
+            ImageObject io = CreateWithNewImage(info.Path + info.Name, info.ObjName);
+
+            io.SetPosition3D(info.Position);
+
+            io.SetParent(info.Root);
+            return io;
+        }
+
+        public static ImageObject CreateWithPrefab(ImageInfo info)
+        {
+            GameObject go = Resources.Load<GameObject>(info.Path + info.Name);
+            go = GameObject.Instantiate(go);
+            
+            return go.GetComponent<ImageObject>();
+        }
+        #endregion
+
         public void ChangeImage(string newImageFileName, float fadeTime)
         {
             Sprite i = Resources.Load<Sprite>(newImageFileName);
             _image.sprite = i;
-            _image.color = new Color(255, 255, 255, 0);
-            _image.DOFade(1, fadeTime).OnComplete(new TweenCallback(OnAnimationFinish));
-         //   Sequence s = DOTween.Sequence();
-       //     s.Append(t);
+            FadeIn(fadeTime);
+            //   Sequence s = DOTween.Sequence();
+            //     s.Append(t);
 
-        //    if(OnAnimationFinish != null)
-           //     s.AppendCallback(new TweenCallback(OnAnimationFinish));
+            //    if(OnAnimationFinish != null)
+            //     s.AppendCallback(new TweenCallback(OnAnimationFinish));
         }
-       
+
+        public void FadeIn(float fadetime)
+        {
+            if (fadetime == 0)
+                Go.SetActive(true);
+            else
+            {
+                _image.color = new Color(255, 255, 255, 0);
+                Tween t = _image.DOFade(1, fadetime);
+                if (OnAnimationFinish != null)
+                    t.OnComplete(new TweenCallback(OnAnimationFinish));
+            }
+        }
+
+        public void FadeOut(float fadetime)
+        {
+            if (fadetime == 0)
+                Go.SetActive(true);
+            else
+            {
+                _image.color = new Color(255, 255, 255, 255);
+                Tween t = _image.DOFade(0, fadetime);
+                if (OnAnimationFinish != null)
+                    t.OnComplete(new TweenCallback(OnAnimationFinish));
+            }
+        }
     }
 }

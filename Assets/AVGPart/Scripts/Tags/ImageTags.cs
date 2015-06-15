@@ -15,7 +15,7 @@ namespace Sov.AVGPart
      * <param>
      * @name:       图片名称
      * @objname:    GameObject的name, 全部小写
-     * @path:    文件在"Resources/"下的相对路径
+     * @path:       文件在"Resources/"下的相对路径
      * @fade:       是否渐变显示
      * @fadetime:   渐变时间
      * 
@@ -47,19 +47,19 @@ namespace Sov.AVGPart
             string path = Params["path"] + Params["name"];
             Engine.Status.EnableNextCommand = false;
 
-            ImageObject io = Instances.Instance.ImageManager.GetImageObjectInScene(objName);
+            ImageObject io = ImageManager.Instance.GetImageObjectInScene(objName);
             io.OnAnimationFinish = OnFinishAnimation;
             if (Params["fade"] == "true")
             {
                 //等待动画结束函数回调继续执行
-                Instances.Instance.ImageManager.ChangeImageWithFade(io,
+                ImageManager.Instance.ChangeImageWithFade(io,
                                                                    path,
                                                            float.Parse(Params["fadetime"]));
             }
             else
             {
                 Engine.Status.EnableNextCommand = true;
-                Instances.Instance.ImageManager.ChangeImageWithoutFade(io, path);
+                ImageManager.Instance.ChangeImageWithoutFade(io, path);
             }
             
 
@@ -85,7 +85,49 @@ namespace Sov.AVGPart
      * tag = image_new
      * 
      * <desc>
-     * 创建并显示新的图片
+     * 预创建新的图片
      * 
-     */ 
+     * <param>
+     * @objname:    GameObject Name
+     * @name:       File name
+     * @path:       Relative Path To the "/Resources/"
+     * @x,y,z:      position of the image to set
+     * //@show:       show immediately?
+     * 
+     * <example>
+     * [image_new name=sachi path=actor/]
+     */
+    public class Image_newTag: AbstractTag
+    {
+        public Image_newTag()
+        {
+            _defaultParamSet = new Dictionary<string,string>() {
+                { "objname", "new_image"},
+                { "name",    ""         },
+                { "path",    ""         },
+                { "x",       "0"        },
+                { "y",       "0"        },
+                { "z",       "0"        },
+                { "scale",   "1"        },
+               // { "show",    "false"    },
+               // { "fade",    "false"    },
+               // { "fadetime","0"        },
+            };
+
+            _vitalParams = new List<string>() {
+                "name",
+                "path"
+            };
+        }
+
+        public override void Excute()
+        {
+            ImageInfo info = new ImageInfo(Params);
+            ImageObject io = ImageManager.Instance.CreateImage(info);
+
+           // Instances.Instance.ImageManager.CreateImage()
+            base.Excute();
+        }
+    }
+
 }

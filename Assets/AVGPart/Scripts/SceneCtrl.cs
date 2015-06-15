@@ -3,6 +3,7 @@ using System.Collections;
 using Sov.AVGPart;
 public class SceneCtrl : MonoBehaviour {
 
+
     public string ScriptFileName;
 	// Use this for initialization
 	void Start () {

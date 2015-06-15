@@ -1,33 +1,36 @@
+//init
 [reg_textbox objname=Main type=main]
 [reg_textbox objname=Name type=name]
+[actor_new name=Maki]
+
 
 [bg_change name=classroom fade=true fadetime=2]
 
 [cm]
 
-[enteractor name=Sachi position=center fade=true]
+[enteractor name=Maki position=center fade=true]
 
-#Sachi
+#Maki
 Nice to meet you.[r]
 
-#Sachi
-Hi ! My name is Sachi.[p]
+#Maki
+Hi ! My name is Maki.[p]
 
 #
 Let's change her face.[p]
 
-[changestate name=Sachi state=Smile fade=true]
+[changestate name=Maki state=Smile fade=true]
 
 Shake TextBox[p]  
 
 [shake name=TextBox]
 
-[moveactor name=Sachi position=left]
+[moveactor name=Maki position=left]
 
 [enteractor name=Yoshino position=right fade=true]
 
-#Yoshino
-Hi , Sachi.[p]
+#Nico
+Hi , Maki.[p]
 
 #
 Change the message Target.[p]
