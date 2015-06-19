@@ -200,6 +200,6 @@ namespace Sov.AVGPart
         string _scriptStream;
         List<KAGWords> _phrasedLines;
         Tokenizer _tokenizer;
-        KAGTagManager _tagManager;
+     //   KAGTagManager _tagManager;
     }
 }

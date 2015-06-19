@@ -19,7 +19,7 @@ namespace Sov.AVGPart
      * @fade:       是否渐变显示
      * @fadetime:   渐变时间
      * 
-     * <example>
+     * <sample>
      * [bg_change name=background path=room_tall fade=true]
      *
      */

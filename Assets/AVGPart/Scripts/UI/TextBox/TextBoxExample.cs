@@ -7,7 +7,7 @@ using Sov.MessageNotificationCenter;
 namespace Sov.AVGPart
 {
     /* 
-     * an simple example of the implement of base TextBox Class
+     * an simple sample of the implement of base TextBox Class
      */
 
     public class TextBoxExample : TextBox

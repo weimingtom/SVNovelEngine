@@ -18,14 +18,39 @@ namespace Sov.AVGPart
         }
         */
 
-        ImageObject()
+        public ImageObject()
         {
             
         }
 
         
-
         #region Factory
+        public override void Init(ObjectInfo info)
+        {
+            base.Init(info);
+            
+            _info = (ImageInfo)info;
+
+            Go = new GameObject(info.ObjName);
+
+            _image = Go.AddComponent<Image>();
+            //create image
+            Sprite i = Resources.Load<Sprite>(_info.Path + _info.Name);
+            if (i == null)
+            {
+                Debug.LogFormat("Cannot load image file:{0}", _info.Path + _info.Name);
+            }
+        }
+
+        public override void Init(string objName)
+        {
+            //attach gameobject in scene
+            base.Init(objName);
+
+            _image = Go.GetComponent<Image>();
+
+        }
+        /*
         public static ImageObject CreateWithSceneObject(string objectName)
         {
             ImageObject io = new ImageObject();
@@ -70,7 +95,7 @@ namespace Sov.AVGPart
 
         public static ImageObject CreateWithInfo(ImageInfo info)
         {
-            /*
+            
             ImageObject io = new ImageObject();
 
             io.Go = new GameObject(info.ObjName);
@@ -78,7 +103,7 @@ namespace Sov.AVGPart
             io.SetPosition3D(info.Position);
 
             io._image = io.Go.AddComponent<Image>();
-            */
+            
             ImageObject io = CreateWithNewImage(info.Path + info.Name, info.ObjName);
 
             io.SetPosition3D(info.Position);
@@ -94,6 +119,7 @@ namespace Sov.AVGPart
             
             return go.GetComponent<ImageObject>();
         }
+        */
         #endregion
 
         public void ChangeImage(string newImageFileName, float fadeTime)
@@ -108,7 +134,7 @@ namespace Sov.AVGPart
             //     s.AppendCallback(new TweenCallback(OnAnimationFinish));
         }
 
-        public void FadeIn(float fadetime)
+        public override void FadeIn(float fadetime)
         {
             if (fadetime == 0)
                 Go.SetActive(true);
@@ -121,7 +147,7 @@ namespace Sov.AVGPart
             }
         }
 
-        public void FadeOut(float fadetime)
+        public override void FadeOut(float fadetime)
         {
             if (fadetime == 0)
                 Go.SetActive(true);

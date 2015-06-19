@@ -19,7 +19,7 @@ namespace Sov.AVGPart
      * @fade:       是否渐变显示
      * @fadetime:   渐变时间
      * 
-     * <example>
+     * <sample>
      * [image_change name=background path=room_tall fade=true]
      */
 
@@ -47,21 +47,21 @@ namespace Sov.AVGPart
             string path = Params["path"] + Params["name"];
             Engine.Status.EnableNextCommand = false;
 
-            ImageObject io = ImageManager.Instance.GetImageObjectInScene(objName);
+            //ImageObject io = ImageManager.Instance.GetImageObjectInScene(objName);
+            //ImageObject io = ImageManager.Instance.GetObjectInScene<ImageObject>(objName);
+            ImageObject io = SceneManager.Instance.GetObjectInScene<ImageObject>(objName);
             io.OnAnimationFinish = OnFinishAnimation;
             if (Params["fade"] == "true")
             {
                 //等待动画结束函数回调继续执行
-                ImageManager.Instance.ChangeImageWithFade(io,
-                                                                   path,
-                                                           float.Parse(Params["fadetime"]));
+                Engine.Status.EnableNextCommand = false;
             }
             else
             {
                 Engine.Status.EnableNextCommand = true;
-                ImageManager.Instance.ChangeImageWithoutFade(io, path);
             }
-            
+            io.ChangeImage(path,
+                    float.Parse(Params["fadetime"]));
 
             base.Excute();
 
@@ -94,7 +94,7 @@ namespace Sov.AVGPart
      * @x,y,z:      position of the image to set
      * //@show:       show immediately?
      * 
-     * <example>
+     * <sample>
      * [image_new name=sachi path=actor/]
      */
     public class Image_newTag: AbstractTag
@@ -123,8 +123,9 @@ namespace Sov.AVGPart
         public override void Excute()
         {
             ImageInfo info = new ImageInfo(Params);
-            ImageObject io = ImageManager.Instance.CreateImage(info);
-
+            //ImageObject io = ImageManager.Instance.CreateImage(info);
+            //ImageObject io = ImageManager.Instance.CreateObject<ImageObject, ImageInfo>(info);
+            ImageObject io = SceneManager.Instance.CreateObject<ImageObject, ImageInfo>(info);
            // Instances.Instance.ImageManager.CreateImage()
             base.Excute();
         }

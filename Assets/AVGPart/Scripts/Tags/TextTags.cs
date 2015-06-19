@@ -15,7 +15,7 @@ namespace Sov.AVGPart
      * <param>
      * @text:   待显示的文本
      * 
-     * <example>
+     * <sample>
      * Hello,World[p]
      */
     public class PrintTag : AbstractTag
@@ -51,7 +51,7 @@ namespace Sov.AVGPart
      * @text:       待显示的文本
      * @textbox:    文本框名称
      * 
-     * <example>
+     * <sample>
      * [settext text=Sachi textbox=TextBox_Name]
      */
     public  class SettextTag : AbstractTag
@@ -82,7 +82,7 @@ namespace Sov.AVGPart
      * <desc>
      * 显示人名
      *  
-     * <example>
+     * <sample>
      * #Sachi
      */
     public class SetnameTag : AbstractTag
@@ -114,7 +114,7 @@ namespace Sov.AVGPart
      * <param>
      * @layer:  主文本框名称
      * 
-     * <example>
+     * <sample>
      * [current layer=TextBox]
      * 
      */
@@ -148,7 +148,7 @@ namespace Sov.AVGPart
      * @objname:     
      * @type:       
      * 
-     * <example>
+     * <sample>
      * [reg_textbox objname=TextBox_Name type=name]
      * 
      */
@@ -169,10 +169,10 @@ namespace Sov.AVGPart
         {
             Debug.Log("[Register TextBox]");
             base.Excute();
-            TextBox t = Instances.Instance.TextBoxesManager.GetTextBoxInScene(Params["objname"]);
+            TextBox t = Instances.Instance.TextBoxesManager.GetTextBoxInScene(Params["name"]);
             if(t == null)
             {
-                Debug.LogFormat("Can not register TestBox");
+                Debug.LogFormat("Can not find TestBox:{0}", Params["name"]);
                 return;
             }
             if (Params["type"] == "main")
@@ -193,7 +193,7 @@ namespace Sov.AVGPart
      * <desc>
      * 暂停等待继续
      * 
-     * <example>
+     * <sample>
      * Hi,World.[l]
      */
     public class LTag: AbstractTag
@@ -222,7 +222,7 @@ namespace Sov.AVGPart
      * <desc>
      * 清除主文本框中的文字
      * 
-     * <example>
+     * <sample>
      * [cm]
      * 
      */
@@ -248,7 +248,7 @@ namespace Sov.AVGPart
      * <desc>
      * 清除当前文本框内容并显示新的文本
      * 
-     * <example>
+     * <sample>
      * Hello,World[p]
      * 
      */
@@ -288,7 +288,7 @@ namespace Sov.AVGPart
      * 在当前文本框显示基础上换行显示新文本
      * 默认为[r]
      * 
-     * <example>
+     * <sample>
      * Hello,World[r]
      * 
      */

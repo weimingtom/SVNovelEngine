@@ -60,7 +60,7 @@ namespace Sov.AVGPart
             this.Go = go;
         }
 
-        public void FadeIn(float fadetime)
+        public override void FadeIn(float fadetime)
         {
             if (fadetime == 0)
                 Go.SetActive(true);
@@ -73,7 +73,7 @@ namespace Sov.AVGPart
             }
         }
 
-        public void FadeOut(float fadetime)
+        public override void FadeOut(float fadetime)
         {
             if (fadetime == 0)
                 Go.SetActive(true);

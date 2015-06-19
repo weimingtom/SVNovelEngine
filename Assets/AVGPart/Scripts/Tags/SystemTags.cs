@@ -12,7 +12,7 @@ namespace Sov.AVGPart
      * <desc>
      *  记录以下内容为一个新片段，供跳转等实现
      *  
-     * <example>
+     * <sample>
      * *Demonstration(English)/START/1_Dialog
      * 
      */
@@ -50,7 +50,7 @@ namespace Sov.AVGPart
      * <desc>
      * 脚本运行到此处时停止
      * 
-     * <example>
+     * <sample>
      * 
      * [select num = 2]
      * [select_new  target=*select_a1]View from the beginning.[end]
@@ -82,7 +82,7 @@ namespace Sov.AVGPart
      * <desc>
      * 显示脚本前面[select_new]的选择肢
      * 
-     * <example>
+     * <sample>
      * [select_show]
      * 
      */
@@ -115,7 +115,7 @@ namespace Sov.AVGPart
      * @target: 点击后跳转的Scenario标签
      * @text:   标签上显示的文字
      * 
-     * <example>
+     * <sample>
      * [select_new  target=*select_a1]Nico~[end]
      * 
      */
@@ -157,7 +157,7 @@ namespace Sov.AVGPart
      * <param>
      * @target: Target scenario to jump
      * 
-     * <example>
+     * <sample>
      * *select_niko
      * [jump target=*select_niko]
      * 
@@ -196,7 +196,7 @@ namespace Sov.AVGPart
      * <param>
      * @time:   需要等待的时间，单位为秒
      * 
-     * <example>
+     * <sample>
      * [wait time=1000]
      * 
      */
@@ -232,4 +232,7 @@ namespace Sov.AVGPart
             Engine.NextCommand();
         }
     }
+
+
+
 }

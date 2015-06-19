@@ -9,6 +9,7 @@ namespace Sov.AVGPart
     public abstract class ObjectInfo
     {
         public string Name = "";
+        public string ObjName = "";
     }
 
     /*
@@ -36,8 +37,21 @@ namespace Sov.AVGPart
             set;
         }
 
+        //attach gameobject in scene
+        public virtual void Init(string objName)
+        {
+            //create Object
+            Go = GameObject.Find(objName);
+            if (Go == null)
+            {
+                Debug.LogFormat("Cannot find object:{0}", objName);
+                return;
+            }
+        }
+
         public virtual void Init(ObjectInfo info)
         {
+            //create Object
 
         }
 

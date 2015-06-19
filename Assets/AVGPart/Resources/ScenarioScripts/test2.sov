@@ -1,6 +1,6 @@
 //init
-[reg_textbox objname=Main type=main]
-[reg_textbox objname=Name type=name]
+[reg_textbox name=Main type=main]
+[reg_textbox name=Name type=name]
 [actor_new name=Maki]
 
 

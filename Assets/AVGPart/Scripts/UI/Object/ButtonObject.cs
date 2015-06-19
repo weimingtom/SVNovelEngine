@@ -47,7 +47,7 @@ namespace Sov.AVGPart
                 _button.onClick.AddListener(new UnityEngine.Events.UnityAction(onClick));
             }
         }
-
+        
 
     }
 }

@@ -15,7 +15,7 @@ namespace Sov.AVGPart
      * TextBoxesManager
      * 挂在GameObject上以管理TextBox
      */
-    class TextBoxesManager : MonoBehaviour
+    class TextBoxesManager// : MonoBehaviour
     {
         public static TextBoxesManager Instance
         {
@@ -23,7 +23,7 @@ namespace Sov.AVGPart
             {
                 if (_sharedTextBoxesManager == null)
                 {
-                    Debug.Log("Do not have TextBoxManager");
+                    _sharedTextBoxesManager = new TextBoxesManager();
              
                 }
                 return _sharedTextBoxesManager;
@@ -31,51 +31,21 @@ namespace Sov.AVGPart
         }
 
         //public TextBox GetCurrentMainTextBox() { return _currentMainTextBox; }
-
-        void Awake()
+        public TextBoxesManager()
         {
-           
-            _sharedTextBoxesManager = this;
-            //注册监听事件
-            MessageListener setTextListener = new MessageListener("EVENT_SETTEXT",
-                                                                OnSetText);
-            MessageListener printListener = new MessageListener("EVENT_PRINT",
-                                                                OnPrintText);
-            MessageListener currentListener = new MessageListener("EVENT_CURRENT",
-                                                                OnCurrent);
-            MessageListener hideMsgBoxListener = new MessageListener("EVENT_HIDE_TEXTBOX",
-                                                                OnHideMsgBox);
-
-            MessageListener ClearMsgListener = new MessageListener("EVENT_CLEAR_MESSAGE",
-                                                                OnClearMessage);
-
-            MessageDispatcher.Instance.RegisterMessageListener(ClearMsgListener);
-            MessageDispatcher.Instance.RegisterMessageListener(setTextListener);
-            MessageDispatcher.Instance.RegisterMessageListener(printListener);
-            MessageDispatcher.Instance.RegisterMessageListener(currentListener);
-            MessageDispatcher.Instance.RegisterMessageListener(hideMsgBoxListener);
 
             _textBoxes = new Dictionary<string, TextBox>();
-            CurrentMainTextBox = TextBoxesInScene[0];
-            RegisterTextBoxesInScene();
+            TextBoxesInScene = new List<TextBox>();
+         //   CurrentMainTextBox = TextBoxesInScene[0];
+        //    RegisterTextBoxesInScene();
         }
-
         //Instance
         static TextBoxesManager _sharedTextBoxesManager = null;
-
-        //textBoxs to print name, backlog and so on
-      //  Dictionary<string, TextBox> _otherTextBoxes;
-
-        //the main textBoxes to print text
-        //change by command [layer] 
-     //   Dictionary<string, TextBox> _mainTextBoxes;
-
         
-        public TextBox[] TextBoxesInScene;
+        public List<TextBox> TextBoxesInScene;
 
         //registered textBox above
         Dictionary<string, TextBox> _textBoxes;
-
 
         public TextBox CurrentMainTextBox
         {
@@ -91,15 +61,16 @@ namespace Sov.AVGPart
 
         public TextBox GetTextBoxInScene(string name)
         {
-            foreach(TextBox t in TextBoxesInScene)
+            foreach (TextBox t in TextBoxesInScene)
             {
-                if(t.name == name)
+                if (t.name == name)
                 {
                     return t;
                 }
             }
-            GameObject go =  GameObject.Find(name);
-            if(go == null)
+
+            GameObject go = GameObject.Find(name);
+            if (go == null)
             {
                 return null;
             }
@@ -108,6 +79,7 @@ namespace Sov.AVGPart
                 return go.GetComponent<TextBox>();
             }
         }
+
 
         //TextBox Click Event
         public void OnClickNextMessage()
@@ -132,6 +104,32 @@ namespace Sov.AVGPart
             }
 
         }
+
+        public void RegTextbox(string objName, string type)
+        {
+            TextBox tb = GetTextBoxInScene(objName);
+
+            if(tb == null)
+            {
+                Debug.LogFormat("Can not reg textbox:{0}", objName);
+            }
+
+            switch(type)
+            {
+                case "main":
+                    CurrentMainTextBox = tb;
+                    break;
+                case "name":
+                    CurrentNameTextBox = tb;
+                    break;
+                default:
+                    break;
+            }
+            if(!TextBoxesInScene.Contains(tb))
+            {
+                TextBoxesInScene.Add(tb);
+            }
+        }
         public void SetName(string text)
         {
             Debug.LogFormat("[SetName]:{0}", text);
@@ -143,21 +141,6 @@ namespace Sov.AVGPart
                 textbox.SetText(text);
             }
         }
-        void OnSetText(Message pEvent)
-        {
-            Debug.Log("on Set Text");
-            OpCommand data = (OpCommand)pEvent.UserData;
-
-            string boxName = data.Params["textbox"];
-            if (_textBoxes.ContainsKey(boxName)) //TODO: 异常
-            {
-                string text = data.Params["text"];
-                TextBox textbox = _textBoxes[boxName];
-                textbox.ClearMessage();
-               // textbox.ShowTextBox();
-                textbox.SetText(text);
-            }
-        }
         
         //tag: print
         public void PrintText(Dictionary<string, string> data)
@@ -165,16 +148,6 @@ namespace Sov.AVGPart
             Debug.Log("[Print Text]");
 
             string text = data["text"];
-
-            CurrentMainTextBox.SetText(text);
-        }
-
-        void OnPrintText(Message pEvent)
-        {
-            Debug.Log("[Print Text]");
-            OpCommand data = (OpCommand)pEvent.UserData;
-
-            string text = data.Params["text"];
 
             CurrentMainTextBox.SetText(text);
         }
@@ -196,24 +169,6 @@ namespace Sov.AVGPart
                 box = _textBoxes[textboxName];
                 box.HideTextBox();
             }
-        }
-        void OnHideMsgBox(Message pEvent)
-        {
-            Debug.Log("[Hide Msg Box]");
-            string textboxName = (string)pEvent.UserData;
-
-            TextBox box;
-            if (_textBoxes.ContainsKey(textboxName))
-            {
-                box = _textBoxes[textboxName];
-                box.HideTextBox();
-            }
-            else if (_textBoxes.ContainsKey(textboxName))
-            {
-                box = _textBoxes[textboxName];
-                box.HideTextBox();
-            }
-        
         }
 
         //change current main text box
@@ -241,39 +196,9 @@ namespace Sov.AVGPart
                 Debug.LogFormat("message error!");
             }
         }
-        void OnCurrent(Message message)
-        {
-            Debug.Log("[on Current]");
-            OpCommand data = (OpCommand)message.UserData;
-            string layer;
-
-            if (data.Params.ContainsKey("layer"))
-            {
-                layer = data.Params["layer"];
-                if (_textBoxes.ContainsKey(layer))
-                {
-                    Debug.LogFormat("change main textbox to: {0}", layer);
-                    CurrentMainTextBox = _textBoxes[layer];
-                    CurrentMainTextBox.SetVisible(true);
-                }
-                else
-                {
-                    Debug.LogFormat("can not change main textbox: {0}", layer);
-                }
-            }
-            else
-            {
-                Debug.LogFormat("message do not have this layer: {0}", message.MessageName);
-            }
-        }
 
         //Tag: [CM]
         public void ClearMessage(Dictionary<string, string> data)
-        {
-            CurrentMainTextBox.ClearMessage();
-        }
-
-        void OnClearMessage(Message message)
         {
             CurrentMainTextBox.ClearMessage();
         }

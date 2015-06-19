@@ -9,7 +9,7 @@ namespace Sov.AVGPart
     class ImageInfo: ObjectInfo
     {
         //Params
-        public string   ObjName   = "";
+      //public  string  ObjName   = "";
       //public  string  Name      = "";
         public  string  Path      = "";
         public  Vector3 Position  = new Vector3(0, 0, 0);
@@ -52,12 +52,7 @@ namespace Sov.AVGPart
             {
                 Scale = float.Parse(param["scale"]);
             }
-
         }
-        
-
-        
-
     }
     class ImageManager
     {
@@ -75,59 +70,31 @@ namespace Sov.AVGPart
 
         static ImageManager _sharedImageManager = null;
 
-        Dictionary<string, ImageObject> _createdImage;
+        
+       
 
         ImageManager()
         {
-            _createdImage = new Dictionary<string, ImageObject>();
+           // _createdImage = new Dictionary<string, ImageObject>();
+         //   _objectInScene = new Dictionary<string, AbstractObject>();
         }
-
-
-        public ImageObject CreateImage(ImageInfo info)
-        {
-            ImageObject io = ImageObject.CreateWithInfo(info);
-            _createdImage.Add(info.Name, io);
-            return io;
-        }
-
-        public ImageObject CreateImage(Dictionary<string, string> param)
-        {
-            ImageInfo info = new ImageInfo(param);
-            return CreateImage(info);
-        }
-
-        public ImageObject GetImageObjectInScene(string objectName)
-        {
-            ImageObject i = ImageObject.CreateWithSceneObject(objectName);
-            return i;
-        }
-
-        public void SetImageAnimationFinishCallback(ImageObject image,Action callback)
-        {
-            image.OnAnimationFinish = callback;
-        }
-        
-        public void ChangeImageWithFade(string objectName, string imageFileName, float fadeTime)
-        {
-            ImageObject oldImage = ImageObject.CreateWithSceneObject(objectName);
-            oldImage.ChangeImage(imageFileName, fadeTime);
-        }
-
+        /*
         public void ChangeImageWithFade(ImageObject io, string imageFileName, float fadeTime)
         {
             io.ChangeImage(imageFileName, fadeTime);
-        }
+        }*/
 
+        /*
         public void ChangeImageWithoutFade(string objectName, string imageFileName)
         {
             ImageObject oldImage = ImageObject.CreateWithSceneObject(objectName);
             oldImage.ChangeImage(imageFileName, 0f);
-        }
-
+        }*/
+        /*
         public void ChangeImageWithoutFade(ImageObject io, string imageFileName)
         {
             io.ChangeImage(imageFileName, 0f);
-        }
+        }*/
         
     }
 }

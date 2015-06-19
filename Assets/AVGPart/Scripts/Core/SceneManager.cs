@@ -50,16 +50,21 @@ namespace Sov.AVGPart
             }
         }
 
-        // Use this for initialization
-        void Start()
+        public TObject GetObjectInScene<TObject>(string objName)
+                where TObject : AbstractObject, new()
         {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
+            if (_objectInScene.ContainsKey(objName))
+            {
+                Debug.LogFormat("Object:{0} has already add to the manager!", objName);
+                return (TObject)_objectInScene[objName];
+            }
+            else
+            {
+                TObject ao = new TObject();
+                ao.Init(objName);
+                _objectInScene.Add(objName, ao);
+                return ao;
+            }
         }
     }
 }
