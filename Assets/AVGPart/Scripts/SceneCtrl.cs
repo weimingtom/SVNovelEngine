@@ -8,7 +8,10 @@ public class SceneCtrl : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         
-        ScriptEngine.Instance.LoadScript(ScriptFileName);
+       // ScriptEngine.Instance.LoadScript(ScriptFileName);
+        Scene s = new Scene(ScriptFileName);
+        s.LoadScript();
+        ScriptEngine.Instance.Run(s);
       //  ScriptEngine.Instance.RunScript();
 	}
 	

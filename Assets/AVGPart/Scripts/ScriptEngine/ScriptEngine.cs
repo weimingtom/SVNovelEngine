@@ -42,84 +42,68 @@ namespace Sov.AVGPart
         }
     };
 
-
+    /*
+     * 运行场景
+     * 
+     * 
+     */
     public class ScriptEngine: MonoBehaviour
     {
         static ScriptEngine _sharedScriptedEngine = null;
 
         public string ScriptFilePath = "/AVGPart/Resources/ScenarioScripts/";
 
-        public class EngineStatus
+       
+        public Scene.SceneStatus Status
         {
-            public bool SkipThisTag
+            get
             {
-                get;
-                internal set;
+                return _currentScene.Status;
             }
-
-            public string CurrentScenario
-            {
-                get;
-                internal set;
-            }
-
-            public bool EnableClickContinue
-            {
-                get;
-                internal set;
-            }
-
-            public bool EnableNextCommand
-            {
-                get;
-                internal set;
-            }
-
-            public EngineStatus()
-            {
-                Reset();
-            }
-
-            internal void Reset()
-            {
-                //Status reset
-                CurrentScenario = "";
-                EnableClickContinue = true;
-                EnableNextCommand = true;
-                SkipThisTag = false;
-            }
-        
         }
-        public EngineStatus Status;
 
-       // List<OpCommand> _scenarioLines;
-        List<OpCommand> _opLines;
+       // List<OpCommand> _opLines;
 
-        List<AbstractTag> _opTags;
+        List<AbstractTag> _opTags
+        {
+            get
+            {
+                return _currentScene.Tags;
+            }
+        }
 
         //Directory?
         //用于记录场景所指的行号
-        Dictionary<string, int> _scenarioDict;
+        Dictionary<string, int> _scenarioDict
+        {
+            get
+            {
+                return _currentScene.ScenarioDict;
+            }
+        }
 
-        int _currentLine        = 0;
+        int _currentLine
+        {
+            get
+            {
+                return _currentScene.CurrentLine;
+            }
+            set
+            {
+                _currentScene.CurrentLine = value;
+            }
+        }
 
         KAGPhraser _phraser;
 
-        
+        //记录正在执行的场景
+        Scene _currentScene;
         #region Public Method
 
         public virtual bool Init()
         {
             _phraser = new KAGPhraser();
-
-            _opLines = new List<OpCommand>();
-
-            _scenarioDict = new Dictionary<string, int>();
-
-            _opTags = new List<AbstractTag>();
-
-            Status = new EngineStatus();
-            
+            _currentScene = null;
             return true;
         }
 
@@ -150,7 +134,7 @@ namespace Sov.AVGPart
                 return _sharedScriptedEngine;
             }
         }
-                                     
+        /*                             
         public void AddCommand(OpCommand op)
         {
             op.LineID = GetLastedLineNo();
@@ -200,7 +184,7 @@ namespace Sov.AVGPart
                 Debug.LogFormat("[Add Scenario]{0}:{1}", GetLastedLineNo(), scenarioName);
                 Status.CurrentScenario = scenarioName;
             }
-        }
+        }*/
 
         public void JumpToScenario(string scenarioName)
         {
@@ -228,6 +212,7 @@ namespace Sov.AVGPart
          * @param string filePath:
          * 脚本文件在Resource下的路径
          */
+        /*
         public void LoadScript(string filePath)
         {
             string path = Application.dataPath + Settings.SCENARIO_SCRIPT_PATH + filePath;
@@ -239,8 +224,14 @@ namespace Sov.AVGPart
             StreamReader sr = File.OpenText(path);
             string str = sr.ReadToEnd();
             sr.Close();
-            _phraser.SetStringStream(str);
+
+            //_phraser.SetScript(str);
             _phraser.Phrase();
+        }*/
+
+        public void Phrase(Scene scenario)
+        {
+            _phraser.Phrase(scenario);
         }
 
         public void RunScript()
@@ -248,6 +239,14 @@ namespace Sov.AVGPart
             Debug.Log("Run Script!");
             StartCoroutine(OnRun());
         }
+
+        public void Run(Scene scene)
+        {
+            _currentScene = scene;
+            Debug.Log("Run Script!");
+            StartCoroutine(OnRun());
+        }
+
         public void NextCommand()
         {
             _currentLine++;
@@ -255,7 +254,7 @@ namespace Sov.AVGPart
            // if (_currentLine < _opTags.Count)
            //     ExcuteCommand();
         }
-        
+        /*
         void ExcuteCommand()
         {
             Status.SkipThisTag = false;
@@ -269,18 +268,34 @@ namespace Sov.AVGPart
                     _opTags[_currentLine].After();
                 }
             }
-        }
+        }*/
 
+        void ExcuteCommand()
+        {
+            _currentScene.Status.SkipThisTag = false;
+
+            int currentLine = _currentScene.CurrentLine;
+            List<AbstractTag> tags = _currentScene.Tags;
+            
+            if (currentLine < tags.Count)
+            {
+                tags[currentLine].Before();
+                if (!Status.SkipThisTag)
+                {
+                    Status.EnableNextCommand = true;
+                    tags[currentLine].Excute();
+                    tags[currentLine].After();
+                }
+            }
+        }
         #endregion
 
         #region   Private Method
 
         void ResetEngine()
         {
-            _currentLine = 0;
-            
-            _opLines.Clear();
-            _scenarioDict.Clear();
+          //  _currentLine = 0;
+           // _scenarioDict.Clear();
 
             
         }

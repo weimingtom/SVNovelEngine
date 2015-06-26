@@ -11,41 +11,36 @@ namespace Sov.AVGPart
         public KAGPhraser()
         {
             _tokenizer = new Tokenizer();
+            _uploadTags = new List<AbstractTag>();
            // _tagManager = new KAGTagManager();
         }
 
-        public KAGPhraser(string stream):
-            this()
-        {
-            _scriptStream = stream;
-        }
 
         int _currentPhraseLineNo = 0;
 
-        public void Phrase()
-        {
-            
-            string[] list;
-            list = _scriptStream.Split(new Char[] {'\n'}, StringSplitOptions.None);
-
-            foreach (string line in list)
-            {
-                string str = line.Trim();
-                if (str == "")
-                {
-                    _currentPhraseLineNo++;
-                    continue;
-                }
-                    
-                KAGWords l = _tokenizer.GetToken(str);
-                if (l != null)
-                {
-                    PhraseALine(l);
-                }
-                _currentPhraseLineNo++;
-            }
-        }
+        List<AbstractTag> _uploadTags;
         
+        string _scriptStream;
+        
+       // List<KAGWords> _phrasedLines;
+        
+        Tokenizer _tokenizer;
+        Scene _scenario;
+        public List<AbstractTag> Phrase(Scene s)
+        {
+            //reset
+            _currentPhraseLineNo = 0;
+            _uploadTags.Clear();
+
+            _scriptStream = s.ScriptContent;
+
+            _scenario = s;
+
+            Phrase();
+            return _uploadTags;
+        }
+
+              
         /*
         static public List<Opcode> PhraseMessageTag(string tag)
         {
@@ -78,30 +73,40 @@ namespace Sov.AVGPart
             return ops;
         
         }*/
-        public void SetStringStream(string String)
+        /*
+        public void SetScript(string String)
         {
             _scriptStream = String;
-        }
+        }*/
 
 
         #region PrivateMethod
-        private void PhraseALine(KAGWords line)
+        void Phrase()
         {
-            /*
-            KAGWord op = line[0];
-            TagInfo tagInfo = new TagInfo(op.Value.ToLower());
-            foreach (KAGWord param in line)
-            {
-                if(op != param)
-                    tagInfo.Params[param.Name] = param.Value;
-            }
 
-            AbstractTag tag = TagFactory.Create(tagInfo, _currentPhraseLineNo);
-            if (tag != null)
-                ScriptEngine.Instance.AddCommand(tag);
-            else
-                Debug.LogFormat("Tag:{0} is not implemented!", tagInfo.TagName);
-             */
+            string[] list;
+            list = _scriptStream.Split(new Char[] { '\n' }, StringSplitOptions.None);
+
+            foreach (string line in list)
+            {
+                string str = line.Trim();
+                if (str == "")
+                {
+                    _currentPhraseLineNo++;
+                    continue;
+                }
+
+                KAGWords l = _tokenizer.GetToken(str);
+                if (l != null)
+                {
+                    PhraseALine(l);
+                }
+                _currentPhraseLineNo++;
+            }
+        }
+
+        void PhraseALine(KAGWords line)
+        {
             KAGWord op = line[0];
             if (op.WordType == KAGWord.Type.TEXT)
             {
@@ -191,15 +196,17 @@ namespace Sov.AVGPart
         {
             AbstractTag tag = TagFactory.Create(tagInfo, _currentPhraseLineNo);
             if (tag != null)
-                ScriptEngine.Instance.AddCommand(tag);
+            {
+               // ScriptEngine.Instance.AddCommand(tag);
+               //_uploadTags.Add(tag);
+                _scenario.AddCommand(tag);
+            }
             else
                 Debug.LogFormat("Tag:{0} is not implemented!", tagInfo.TagName);
         }
         #endregion
 
-        string _scriptStream;
-        List<KAGWords> _phrasedLines;
-        Tokenizer _tokenizer;
+        
      //   KAGTagManager _tagManager;
     }
 }
