@@ -11,6 +11,22 @@ namespace Sov.AVGPart
     
     class UIManager
     {
+        //Instance
+        static UIManager _sharedUIManager = null;
+
+        public static UIManager Instance
+        {
+            get
+            {
+                if (_sharedUIManager == null)
+                {
+                    _sharedUIManager = new UIManager();
+                }
+                return _sharedUIManager;
+            }
+        }
+
+
         public Transform SelectLayout;
 
         List<GameObject> _selectList;

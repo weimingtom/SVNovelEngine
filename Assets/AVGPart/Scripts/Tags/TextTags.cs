@@ -33,7 +33,7 @@ namespace Sov.AVGPart
 
         public override void Excute()
         {
-            Instances.Instance.TextBoxesManager.PrintText(Params);
+           TextBoxesManager.Instance.PrintText(Params);
             base.Excute();
         }
         public override void After()
@@ -133,7 +133,7 @@ namespace Sov.AVGPart
 
         public override void Excute()
         {
-            Instances.Instance.TextBoxesManager.OnCurrent(Params);
+            TextBoxesManager.Instance.OnCurrent(Params);
          
             base.Excute();
         }
@@ -169,7 +169,7 @@ namespace Sov.AVGPart
         {
             Debug.Log("[Register TextBox]");
             base.Excute();
-            TextBox t = Instances.Instance.TextBoxesManager.GetTextBoxInScene(Params["name"]);
+            TextBox t = TextBoxesManager.Instance.GetTextBoxInScene(Params["name"]);
             if(t == null)
             {
                 Debug.LogFormat("Can not find TestBox:{0}", Params["name"]);
@@ -177,11 +177,11 @@ namespace Sov.AVGPart
             }
             if (Params["type"] == "main")
             {
-                Instances.Instance.TextBoxesManager.CurrentMainTextBox = t;
+                TextBoxesManager.Instance.CurrentMainTextBox = t;
             }
             else if (Params["type"] == "name")
             {
-                Instances.Instance.TextBoxesManager.CurrentNameTextBox = t;
+                TextBoxesManager.Instance.CurrentNameTextBox = t;
             }
         } 
     }
@@ -236,7 +236,7 @@ namespace Sov.AVGPart
 
         public override void Excute()
         {
-            Instances.Instance.TextBoxesManager.ClearMessage(Params);
+            TextBoxesManager.Instance.ClearMessage(Params);
   
             base.Excute();
         }
@@ -271,7 +271,7 @@ namespace Sov.AVGPart
         public override void Excute()
         {
             Debug.Log("[p]");
-            Instances.Instance.TextBoxesManager.ClearMessage(Params);    
+            TextBoxesManager.Instance.ClearMessage(Params);    
             base.Excute();
         }
 
@@ -311,7 +311,7 @@ namespace Sov.AVGPart
         public override void Excute()
         {
             Debug.Log("[r]");
-            Instances.Instance.TextBoxesManager.Reline();
+            TextBoxesManager.Instance.Reline();
             base.Excute();
         }
 

@@ -40,6 +40,7 @@ namespace Sov.AVGPart
             {
                 Debug.LogFormat("Cannot load image file:{0}", _info.Path + _info.Name);
             }
+            
         }
 
         public override void Init(string objName)

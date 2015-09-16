@@ -4,34 +4,87 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
+/*
+ * ChangeLog
+ * 2015.9.16
+ * Use Singleton
+ */
 namespace Sov.AVGPart
 {
     //挂在场景中用来设置
+    //做成独立窗口形式
     class Settings : MonoBehaviour
     {
-        public static string SCENARIO_SCRIPT_PATH   = "/AVGPart/Resources/ScenarioScripts/";
-        public static string PREFAB_PATH            = "Prefab/";
-        public static string UI_IMAGE_PATH          = "UImage/";
-        public static string BG_IMAGE_PATH          = "BG/";
-        public static string ACTOR_IMAGE_PATH       = "Actor/Image/";
+        //Instance
+        static Settings _sharedSettings = null;
+        void Awake()
+        {
+            _sharedSettings = this;
+        }
 
-        public static string UI_ROOT_IN_SCENE       = "UICanvas";
-        public static string ACTOR_ROOT_IN_SCENE    = "ActorCanvas";
-        public static string BG_ROOT_IN_SCENE       = "BGCanvas";
+        public static Settings Instance
+        {
+            get
+            {
+                if(_sharedSettings == null)
+                {
+                    GameObject go = new GameObject("Setting");
+                    _sharedSettings = go.AddComponent<Settings>();
+                    if(_sharedSettings == null)
+                    {
+                        Debug.LogError("Cannot create Settings");
+                    }
+                }
+                return _sharedSettings;
+            }
+        }
+        public string SCENARIO_SCRIPT_PATH   = "/AVGPart/Resources/ScenarioScripts/";
+        public string PREFAB_PATH            = "Prefab/";
+        public string UI_IMAGE_PATH          = "UImage/";
+        public string BG_IMAGE_PATH          = "BG/";
+        public string ACTOR_IMAGE_PATH       = "Actor/Image/";
 
-        public static int UI_LAYER = 5;
-        public static int ACTOR_LAYER = 9;
-        public static int BG_LAYER = 8;
+        public string UI_ROOT_IN_SCENE       = "UICanvas";
+        public string ACTOR_ROOT_IN_SCENE    = "ActorCanvas";
+        public string BG_ROOT_IN_SCENE       = "BGCanvas";
 
-        public static float Actor_Y     = 0f;
-        public static float Center_X    = 0f;
-        public static float Left_X      = 0f;
-        public static float Right_X     = 0f;
-        public static float Mid_Left_X  = 0f;
-        public static float Mid_Right_X = 0f;
-        public static float Far_Z       = 0f;
-        public static float Near_Z      = 0f;
-        public static float Normal_Z    = 0f;
+        public int UI_LAYER = 5;
+        public int ACTOR_LAYER = 9;
+        public int BG_LAYER = 8;
+        
+        public int PreferredScreenWidth  = 750;
+        public int PreferredScreenHeight = 1334;
+      //  [Serializable]
+       // static public class ActorSettings
+      //  {
+            [Range(0, 1334)]
+            public float Actor_Y = 0f;
+            
+            [Range(0, 750)]
+            public float Center_X = 0f;
+
+            [Range(0, 750)]
+            public float Left_X = 0f;
+
+            [Range(0, 750)]
+            public float Right_X = 0f;
+
+            [Range(0, 750)]
+            public float Mid_Left_X = 0f;
+
+            // [Range(-Screen.width / 2, Screen.width)]
+            [Range(0, 750)]
+            public float Mid_Right_X = 0f;
+
+            [Range(0, 2)]
+            public float Far_Z = 0f;
+
+            [Range(0, 2)]
+            public float Near_Z = 0f;
+
+            [Range(0, 2)]
+            public float Normal_Z = 0f;
+      //  }
 
         public static Transform UIRoot
         {
@@ -39,7 +92,7 @@ namespace Sov.AVGPart
             {
                 if (_uiRoot == null)
                 {
-                    GameObject go = GameObject.Find(Settings.UI_ROOT_IN_SCENE);
+                    GameObject go = GameObject.Find(Settings.Instance.UI_ROOT_IN_SCENE);
                     if (go == null)
                     {
                         Debug.Log("Can not find UICanvas, create it in Scene!");
@@ -50,7 +103,7 @@ namespace Sov.AVGPart
                 return _uiRoot;
             }
         }
-        public static Transform _uiRoot = null;
+        static Transform _uiRoot = null;
 
         public static Transform BGRoot
         {
@@ -58,7 +111,7 @@ namespace Sov.AVGPart
             {
                 if (_bgRoot == null)
                 {
-                    GameObject go = GameObject.Find(Settings.BG_ROOT_IN_SCENE);
+                    GameObject go = GameObject.Find(Settings.Instance.BG_ROOT_IN_SCENE);
                     if (go == null)
                     {
                         Debug.Log("Can not find BGCanvas, create it in Scene!");
@@ -69,7 +122,7 @@ namespace Sov.AVGPart
                 return _bgRoot;
             }
         }
-        public static Transform _bgRoot = null;
+        static Transform _bgRoot = null;
 
         public static Transform ActorRoot
         {
@@ -77,7 +130,7 @@ namespace Sov.AVGPart
             {
                 if (_actorRoot == null)
                 {
-                    GameObject go = GameObject.Find(Settings.ACTOR_ROOT_IN_SCENE);
+                    GameObject go = GameObject.Find(Settings.Instance.ACTOR_ROOT_IN_SCENE);
                     if (go == null)
                     {
                         Debug.Log("Can not find ActorCanvas, create it in Scene!");
@@ -88,6 +141,6 @@ namespace Sov.AVGPart
                 return _actorRoot;
             }
         }
-        public static Transform _actorRoot = null;
+        static Transform _actorRoot = null;
     }
 }

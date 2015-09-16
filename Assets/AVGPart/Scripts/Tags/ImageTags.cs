@@ -49,7 +49,7 @@ namespace Sov.AVGPart
 
             //ImageObject io = ImageManager.Instance.GetImageObjectInScene(objName);
             //ImageObject io = ImageManager.Instance.GetObjectInScene<ImageObject>(objName);
-            ImageObject io = SceneManager.Instance.GetObjectInScene<ImageObject>(objName);
+            ImageObject io = ImageManager.Instance.GetObjectInScene<ImageObject>(objName);
             io.OnAnimationFinish = OnFinishAnimation;
             if (Params["fade"] == "true")
             {
@@ -125,7 +125,7 @@ namespace Sov.AVGPart
             ImageInfo info = new ImageInfo(Params);
             //ImageObject io = ImageManager.Instance.CreateImage(info);
             //ImageObject io = ImageManager.Instance.CreateObject<ImageObject, ImageInfo>(info);
-            ImageObject io = SceneManager.Instance.CreateObject<ImageObject, ImageInfo>(info);
+            ImageObject io = ImageManager.Instance.CreateObject<ImageObject, ImageInfo>(info);
            // Instances.Instance.ImageManager.CreateImage()
             base.Excute();
         }

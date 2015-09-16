@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using UnityEngine;
+
 namespace Sov.AVGPart
 {
     /*
@@ -51,6 +51,11 @@ namespace Sov.AVGPart
 
         public SceneStatus Status;
 
+        public string Name
+        {
+            get;
+            set;
+        }
         public List<AbstractTag> Tags
         {
             get;
@@ -83,16 +88,32 @@ namespace Sov.AVGPart
             private set;
         }
 
+        // public Action PhraseFinishCalback;
+
+        public bool IsPhraseFinish
+        {
+            get;
+            set;
+        }
         ScriptEngine _engine;
 
-        public Scene(string scriptPath):
+
+        public Scene(string scriptPath) :
             this() //init
         {
             ScriptFilePath = scriptPath;
+            Name = scriptPath;
+        }
+
+        public void PhraseFinish()
+        {
+            Debug.LogFormat("Phrase Before IsPhraseFinish={0}", IsPhraseFinish);
+            IsPhraseFinish = true;
+            Debug.LogFormat("Phrase After IsPhraseFinish={0}", IsPhraseFinish);
         }
 
         //some init
-        public Scene()
+        Scene()
         {
             Tags = new List<AbstractTag>();
             Status = new SceneStatus();
@@ -102,13 +123,16 @@ namespace Sov.AVGPart
 
             ScenarioDict = new Dictionary<string, int>();
             _engine = ScriptEngine.Instance;
+            IsPhraseFinish = false;
         }
 
-        
+
         public void LoadScript()
         {
-            string path = Application.dataPath + Settings.SCENARIO_SCRIPT_PATH + ScriptFilePath;
-            if(!File.Exists(path))
+            string path = Settings.Instance.SCENARIO_SCRIPT_PATH + ScriptFilePath;
+
+#if UNITY_STANDALONE_WIN          
+            if (!File.Exists(path))
             {
                 Debug.LogFormat("cannot find script file: {0}!", path);
             }else
@@ -116,11 +140,60 @@ namespace Sov.AVGPart
             StreamReader sr = File.OpenText(path);
             ScriptContent = sr.ReadToEnd();
             sr.Close();
+#endif
 
+#if UNITY_ANDROID
+           // TextAsset t = Resources.Load<TextAsset>(path);
+            path = Application.dataPath + path;
+            if (!File.Exists(path))
+            {
+                Debug.LogFormat("cannot find script file: {0}!", path);
+            }
+            else
+                Debug.LogFormat("load script file: {0}!", path);
+            //ScriptContent = t.text;
+            StreamReader sr = File.OpenText(path);
+            ScriptContent = sr.ReadToEnd();
+            sr.Close();
+#endif
             //_phraser.SetScript(str);
             _engine.Phrase(this);
         }
 
+        public void LoadScriptAsync()
+        {
+            string path = Settings.Instance.SCENARIO_SCRIPT_PATH + ScriptFilePath;
+
+#if UNITY_STANDALONE_WIN          
+            if (!File.Exists(path))
+            {
+                Debug.LogFormat("cannot find script file: {0}!", path);
+            }else
+                Debug.LogFormat("load script file: {0}!", path);
+            StreamReader sr = File.OpenText(path);
+            ScriptContent = sr.ReadToEnd();
+            sr.Close();
+#endif
+
+#if UNITY_ANDROID
+            TextAsset t = Resources.Load<TextAsset>(path);
+            if (t == null)
+            {
+                Debug.LogFormat("cannot find script file: {0}!", path);
+            }
+            else
+                Debug.LogFormat("load script file: {0}!", path);
+            ScriptContent = t.text;
+#endif
+            //_phraser.SetScript(str);
+            Thread thread = new Thread(
+                () =>
+                {
+                    _engine.Phrase(this);
+                    PhraseFinish();
+                });
+            thread.Start();
+        }
         public void AddCommand(AbstractTag tag)
         {
             //tag.LineNo = _opTags.Count;
@@ -156,6 +229,6 @@ namespace Sov.AVGPart
             return Tags.Count;
         }
 
-        
+
     }
 }

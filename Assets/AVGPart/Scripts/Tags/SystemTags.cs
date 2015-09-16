@@ -100,7 +100,7 @@ namespace Sov.AVGPart
 
         public override void Excute()
         {
-            Instances.Instance.UIManager.ShowSelects();
+            UIManager.Instance.ShowSelects();
             base.Excute();
         }
     }
@@ -136,11 +136,11 @@ namespace Sov.AVGPart
         public override void Excute()
         {
             string target = Params["target"];
-            Instances.Instance.UIManager.AddSelect("button", Params["text"]
+            UIManager.Instance.AddSelect("button", Params["text"]
                       , () =>
                       {
                           Engine.JumpToScenario(target);
-                          Instances.Instance.UIManager.ClearSelects();
+                          UIManager.Instance.ClearSelects();
                       }
                                                   );
             base.Excute();

@@ -72,6 +72,12 @@ namespace Sov.AVGPart
             Go.transform.position = new Vector3(x, y, v3.z);
         }
 
+        public virtual void SetPosition2D(Vector2 p)
+        {
+            Vector3 v3 = Go.transform.position;
+            Go.transform.position = new Vector3(p.x, p.y, v3.z);
+        }
+
         public virtual void SetParent(string name)
         {
             GameObject p =  GameObject.Find(name);

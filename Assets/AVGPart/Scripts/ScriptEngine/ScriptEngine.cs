@@ -234,11 +234,17 @@ namespace Sov.AVGPart
             _phraser.Phrase(scenario);
         }
 
+        /*
         public void RunScript()
         {
+            if (_currentScene == null)
+            {
+                //Debug.Log()
+                return;
+            }
             Debug.Log("Run Script!");
             StartCoroutine(OnRun());
-        }
+        }*/
 
         public void Run(Scene scene)
         {

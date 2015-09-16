@@ -38,11 +38,11 @@ namespace Sov.AVGPart
             if (Params["path"] != "")
             {
                 string s = Params["path"];
-                Params["path"] = Settings.BG_IMAGE_PATH + s;
+                Params["path"] = Settings.Instance.BG_IMAGE_PATH + s;
             }
             else
             {
-                Params["path"] = Settings.BG_IMAGE_PATH;
+                Params["path"] = Settings.Instance.BG_IMAGE_PATH;
             }
 
             if (Params["objname"] == "")

@@ -8,7 +8,7 @@
 
 [cm]
 
-[enteractor name=Maki position=center fade=true]
+[enteractor name=Maki pos=center fade=true]
 
 #Maki
 Nice to meet you.[r]
@@ -25,9 +25,13 @@ Shake TextBox[p]
 
 [shake name=TextBox]
 
-[moveactor name=Maki position=left]
+#Maki
+Trun Left[p]
+[moveactor name=Maki pos=left]
 
-[enteractor name=Yoshino position=right fade=true]
+#Maki
+Bigger~[p]
+[enteractor name=Maki scale=2]
 
 #Nico
 Hi , Maki.[p]

@@ -186,6 +186,7 @@ namespace Sov.AVGPart
             {
                 tag = (AbstractTag)Activator.CreateInstance(type);
             } 
+            
             catch (Exception e)
             {
                 //Debug.Log(e.ToString());

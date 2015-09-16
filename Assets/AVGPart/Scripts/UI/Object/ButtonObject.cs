@@ -21,13 +21,13 @@ namespace Sov.AVGPart
 
         public ButtonObject(string buttonImageFileName, string text, Action onClick)
         {
-            Go = Resources.Load(Settings.PREFAB_PATH + "Button") as GameObject;
+            Go = Resources.Load(Settings.Instance.PREFAB_PATH + "Button") as GameObject;
            // Go.SetActive(false);
             Go = GameObject.Instantiate<GameObject>(Go);
 
             _image = Go.GetComponent<Image>();
 
-            Sprite sprite = Resources.Load<Sprite>(Settings.UI_IMAGE_PATH + buttonImageFileName);
+            Sprite sprite = Resources.Load<Sprite>(Settings.Instance.UI_IMAGE_PATH + buttonImageFileName);
             
             if (_image && sprite)
             {

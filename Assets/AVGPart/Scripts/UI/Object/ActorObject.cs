@@ -11,10 +11,11 @@ namespace Sov.AVGPart
     class ActorObject: AbstractObject
     {
 
-        string ActorPrefabPath = Settings.PREFAB_PATH + "Image";
+        string ActorPrefabPath = Settings.Instance.PREFAB_PATH + "Image";
 
         Image _image;
 
+        RectTransform _transform;
         public ActorObject(): base()
         { 
            
@@ -24,12 +25,12 @@ namespace Sov.AVGPart
         {
             ImageInfo info = (ImageInfo)infoo;
             //load image
-            GameObject go = Resources.Load<GameObject>(Settings.PREFAB_PATH + "Image");
+            GameObject go = Resources.Load<GameObject>(Settings.Instance.PREFAB_PATH + "Image");
             go = GameObject.Instantiate(go);
             
             //set tag
 
-            go.layer = Settings.ACTOR_LAYER;
+            go.layer = Settings.Instance.ACTOR_LAYER;
 
             //set name
             go.name = info.ObjName;
@@ -41,21 +42,28 @@ namespace Sov.AVGPart
             if (sp)
             {
                 _image.sprite = sp;
+                _image.SetNativeSize();
             }
             else
             {
                 Debug.LogFormat("Actor: {0} not found", info.Path + info.Name);
             }
 
-            Transform t = go.transform;
+            _transform = go.GetComponent<RectTransform>();
+
+            //set local position
+            _transform.anchorMin = Vector2.zero;
+            _transform.anchorMax = Vector2.zero;
 
             //set parent
-            t.SetParent(Settings.ActorRoot, true);
+            _transform.SetParent(Settings.ActorRoot, true);
 
             //set position and scale
-            t.position = info.Position;
+            _transform.anchoredPosition = info.Position;
+
+            _transform.localScale = new Vector3(info.Scale, info.Scale, info.Scale);
+             
             
-            t.localScale = new Vector3(info.Scale, info.Scale, info.Scale);
             go.SetActive(false);
             this.Go = go;
         }
@@ -86,10 +94,28 @@ namespace Sov.AVGPart
             }
         }
 
-        public override void SetPosition3D(Vector3 p)
+        public override void SetPosition2D(Vector2 p)
         {
-            Go.GetComponent<RectTransform>().anchoredPosition3D = p;
+            Go.GetComponent<RectTransform>().anchoredPosition = p;
         }
 
+        public void SetScale(float dt)
+        {
+            _transform.localScale = new Vector3(dt, dt, 1);
+        }
+
+        public void MoveTo(Vector2 to, float dt)
+        {
+            Tween t = _transform.DOAnchorPos(to, dt);
+            if (OnAnimationFinish != null)
+                t.OnComplete(new TweenCallback(OnAnimationFinish));
+        }
+
+        public void ScaleTo(float range, float dt)
+        {
+            Tween t = _transform.DOScale(range, dt);
+            if (OnAnimationFinish != null)
+                t.OnComplete(new TweenCallback(OnAnimationFinish));
+        }
     }
 }

@@ -5,6 +5,106 @@ using System.Text;
 using UnityEngine;
 namespace Sov.AVGPart
 {
+
+    public class ActorTagsUtility
+    {
+        static public float GetActorPositionX(string positionX)
+        {
+            switch (positionX)
+            {
+                case "center":
+                    return Settings.Instance.Center_X;
+                case "left":
+                    return Settings.Instance.Left_X;
+                case "right":
+                    return Settings.Instance.Right_X;
+                case "mid_left":
+                    return Settings.Instance.Mid_Left_X;
+                case "mid_right":
+                    return Settings.Instance.Mid_Right_X;
+                default: //center by default
+                    return Settings.Instance.Center_X;
+            }
+            /*
+            switch (positionX)
+            {
+                case "center":
+                    return new Vector3(Settings.Center_X, y, z);
+                case "left":
+                    return new Vector3(Settings.Left_X, y, z);
+                case "right":
+                    return new Vector3(Settings.Right_X, y, z);
+                case "mid_left":
+                    return new Vector3(Settings.Mid_Left_X, y, z);
+                case "mid_right":
+                    return new Vector3(Settings.Mid_Right_X, y, z);
+                default: //center by default
+                    return new Vector3(Settings.Center_X, y, z);
+            }*/
+        }
+        static public float GetActorPositionY()
+        {
+            return Settings.Instance.Actor_Y;
+        }
+        static public float GetActorPositionZ(string positionZ)
+        {
+            float z = Settings.Instance.Normal_Z;
+            switch (positionZ)
+            {
+                case "Far":
+                    z = Settings.Instance.Far_Z;
+                    break;
+                case "Near":
+                    z = Settings.Instance.Near_Z;
+                    break;
+                case "Normal":
+                    z = Settings.Instance.Normal_Z;
+                    break;
+                default:
+                    z = Settings.Instance.Normal_Z;
+                    break;
+            }
+            return z;
+        }
+
+        static public Vector3 GetActorPosition(string pos, string posZ)
+        {
+            float z = Settings.Instance.Normal_Z;
+            float y = Settings.Instance.Actor_Y;
+
+            switch (posZ)
+            {
+                case "Far":
+                    z = Settings.Instance.Far_Z;
+                    break;
+                case "Near":
+                    z = Settings.Instance.Near_Z;
+                    break;
+                case "Normal":
+                    z = Settings.Instance.Normal_Z;
+                    break;
+                default:
+                    z = Settings.Instance.Normal_Z;
+                    break;
+            }
+
+            switch (pos)
+            {
+                case "center":
+                    return new Vector3(Settings.Instance.Center_X, y, z);
+                case "left":
+                    return new Vector3(Settings.Instance.Left_X, y, z);
+                case "right":
+                    return new Vector3(Settings.Instance.Right_X, y, z);
+                case "mid_left":
+                    return new Vector3(Settings.Instance.Mid_Left_X, y, z);
+                case "mid_right":
+                    return new Vector3(Settings.Instance.Mid_Right_X, y, z);
+                default: //center by default
+                    return new Vector3(Settings.Instance.Center_X, y, z);
+            }
+        }
+    }
     /*
      * tag = actor_new
      * 
@@ -62,7 +162,7 @@ namespace Sov.AVGPart
 
             //set path
             string path = Params["path"];
-            path = Settings.ACTOR_IMAGE_PATH + path;
+            path = Settings.Instance.ACTOR_IMAGE_PATH + path;
             Params["path"] = path;
 
             //set position
@@ -75,9 +175,10 @@ namespace Sov.AVGPart
             
             ImageInfo info = new ImageInfo(Params);
             //set position
-            info.Position = new Vector3(0, 0, 0);
+           // info.Position = new Vector2(Screen.width / 2,
+             //                           Screen.height / 2);
 
-            ActorObject ao = SceneManager.Instance.CreateObject<ActorObject, ImageInfo>(info);
+            ActorObject ao = ImageManager.Instance.CreateObject<ActorObject, ImageInfo>(info);
 
             //base.Excute();
         }
@@ -132,14 +233,16 @@ namespace Sov.AVGPart
             Debug.LogFormat("Enter Actor: {0}", actorName);
 
             //get actor
-            ActorObject ao = SceneManager.Instance.GetCreatedObject<ActorObject>(actorName);
+            ActorObject ao = ImageManager.Instance.GetCreatedObject<ActorObject>(actorName);
             if (ao == default(ActorObject))
                 return;
 
             ao.Go.SetActive(true);
 
-            Vector3 pos = GetActorPosition(Params["pos"], Params["z_pos"]);
-            ao.SetPosition3D(pos);
+            Vector3 pos = ActorTagsUtility.GetActorPosition(Params["pos"],Params["z_pos"]);
+            ao.SetPosition2D(new Vector2(pos.x, pos.y));
+            ao.SetScale(pos.z);
+            //ao.SetPosition3D(pos);
             ao.OnAnimationFinish = OnFinishAnimation;
 
             float time = float.Parse(Params["fadetime"]);
@@ -156,40 +259,7 @@ namespace Sov.AVGPart
             }
         }
 
-        Vector3 GetActorPosition(string positionX, string positionZ)
-        {
-            float y = Settings.Actor_Y;
-            float z = Settings.Normal_Z;
-            switch (positionZ)
-            {
-                case "Far":
-                    z = Settings.Far_Z;
-                    break;
-                case "Near":
-                    z = Settings.Near_Z;
-                    break;
-                case "Normal":
-                default:
-                    z = Settings.Normal_Z;
-                    break;
-            }
 
-            switch (positionX)
-            {
-                case "center":
-                    return new Vector3(Settings.Center_X, y, z);
-                case "left":
-                    return new Vector3(Settings.Left_X, y, z);
-                case "right":
-                    return new Vector3(Settings.Right_X, y, z);
-                case "mid_left":
-                    return new Vector3(Settings.Mid_Left_X, y, z);
-                case "mid_right":
-                    return new Vector3(Settings.Mid_Right_X, y, z);
-                default: //center by default
-                    return new Vector3(Settings.Center_X, y, z);
-            }
-        }
 
         public override void OnFinishAnimation()
         {
@@ -199,6 +269,103 @@ namespace Sov.AVGPart
                 Engine.Status.EnableNextCommand = true;
                 Engine.NextCommand();
             }
+        }
+
+        public override void After()
+        {
+            //base.After();
+        }
+    }
+
+    /* 
+     * tag = moveactor
+     * 
+     * <desc>
+     * 移动立绘
+     * 从当前位置移动到指定位置
+     * 
+     * <params>
+     * @name:       the name of the actor
+     * @pos:        立绘显示的水平位置, 是一个enum, 有以下五种, 默认为center
+     *              {center, left, right, mid_left, mid_right}
+     * @z_pos:      立绘显示的纵向位置，及近和远, 默认为normal
+     *              {far, near, normal}   
+     * @time:       移动的时间             
+     * @scale:      立绘的大小 倍数
+     * 
+     * <sample>
+     * [moveactor name=Maki pos=left]
+     *
+     */
+    public class MoveactorTag : AbstractTag
+    {
+        public MoveactorTag()
+        {
+            
+            _defaultParamSet = new Dictionary<string, string>() {
+                { "name",    ""         },
+                { "pos",     ""   },
+                { "z_pos",   ""   },
+                { "time",    "1"        },
+                { "scale",   "1"        }
+            };
+
+            _vitalParams = new List<string>() {
+                "name",
+            };
+        }
+
+        public override void Excute()
+        {
+            //base.Excute();
+
+            //actor name
+            string actorName = Params["name"];
+
+            Debug.LogFormat("Move Actor: {0}", actorName);
+
+            //get actor
+            ActorObject ao = ImageManager.Instance.GetCreatedObject<ActorObject>(actorName);
+            if (ao == default(ActorObject))
+                return;
+
+            ao.Go.SetActive(true);
+
+            float time = float.Parse(Params["time"]);
+
+            bool isAnim = false;
+            if (Params["pos"] != "")
+            {
+                isAnim = true;
+                float x_move = ActorTagsUtility.GetActorPositionX(Params["pos"]);
+                float y = ActorTagsUtility.GetActorPositionY();
+                ao.MoveTo(new Vector2(x_move, y), time);
+            }
+            // Vector3 pos = ActorTagsUtility.GetActorPosition(Params["pos"],Params["z_pos"]);
+            if (Params["z_pos"] != "")
+            {
+                isAnim = true;
+                float z_scale = ActorTagsUtility.GetActorPositionZ(Params["z_pos"]);
+                ao.ScaleTo(z_scale, time);
+            }
+
+            if (isAnim)
+            {
+                ao.OnAnimationFinish = OnFinishAnimation;
+            }
+
+            Engine.Status.EnableNextCommand = false;
+        }
+
+
+        public override void OnFinishAnimation()
+        {
+         //   if (Params["fade"] == "true")
+         //   {
+                Debug.Log("Move Finish!");
+                Engine.Status.EnableNextCommand = true;
+                Engine.NextCommand();
+         //   }
         }
 
         public override void After()

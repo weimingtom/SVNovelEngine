@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Sov.AVGPart
 {
+    /*
     class Instances
     {
         Instances()
@@ -48,7 +49,7 @@ namespace Sov.AVGPart
                 return TextBoxesManager.Instance;
             }
         }
-        /*
+        
         ImageManager _sharedImageManager = null;
         public ImageManager ImageManager
         {
@@ -60,7 +61,7 @@ namespace Sov.AVGPart
                 }
                 return _sharedImageManager;
             }
-        }*/
+        }
 
-    }
+    }*/
 }
