@@ -10,7 +10,11 @@ namespace Sov.AVGPart
 {
     class ActorObject: AbstractObject
     {
-
+        public bool IsEnterScene
+        {
+            get;
+            set;
+        }
         string ActorPrefabPath = Settings.Instance.PREFAB_PATH + "Image";
 
         Image _image;
@@ -66,15 +70,20 @@ namespace Sov.AVGPart
             
             go.SetActive(false);
             this.Go = go;
+
+            IsEnterScene = false;
         }
 
         public override void FadeIn(float fadetime)
         {
             if (fadetime == 0)
+            {
                 Go.SetActive(true);
+                _image.color = new Color(255, 255, 255, 255);
+            }
             else
             {
-                _image.color = new Color(255, 255, 255, 0);
+                 _image.color = new Color(255, 255, 255, 0);
                 Tween t = _image.DOFade(1, fadetime);
                 if (OnAnimationFinish != null)
                     t.OnComplete(new TweenCallback(OnAnimationFinish));
@@ -84,7 +93,10 @@ namespace Sov.AVGPart
         public override void FadeOut(float fadetime)
         {
             if (fadetime == 0)
-                Go.SetActive(true);
+            {
+                Go.SetActive(false);
+                _image.color = new Color(255, 255, 255, 0);
+            }
             else
             {
                 _image.color = new Color(255, 255, 255, 255);

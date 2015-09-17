@@ -2,7 +2,7 @@
 [reg_textbox name=Main type=main]
 [reg_textbox name=Name type=name]
 [actor_new name=Maki]
-
+[actor_new name=Nico]
 
 [bg_change name=classroom fade=true fadetime=2]
 
@@ -31,11 +31,13 @@ Trun Left[p]
 
 #Maki
 Bigger~[p]
-[enteractor name=Maki scale=2]
+[moveactor name=Maki z_pos=near]
+[wait time = 1000]
+[moveactor name=Maki z_pos=normal]
 
 #Nico
 Hi , Maki.[p]
-
+[enteractor name=Nico pos=right fade=true]
 #
 Change the message Target.[p]
 
@@ -53,7 +55,10 @@ The Message Target has returned to the original Target.[p]
 
 You can also display options.[p]
 
-*select_niko
+*select
+
+[enteractor name=Maki pos=left fade=false]
+[enteractor name=Nico pos=right fade=false]
 
 [select_new  target=*select_a1]Nico~[end]
 [select_new  target=*select_a2]Maki~[end]
@@ -63,6 +68,8 @@ You can also display options.[p]
 
 *select_a1
 
+[exitactor name=Maki]
+[moveactor name=Nico pos=normal]
 #Nico
 にっこにっこにー☆[r]
 あなたのハートににこにこにー♪ [r]
@@ -70,10 +77,12 @@ You can also display options.[p]
 にこにーって覚えてラブにこー♪[r]
 ダメダメダメにこにーはみんなのもっの♪[p]
 
-[jump target=*select_niko]
+[jump target=*select]
 
 *select_a2
 
+[exitactor name=Nico]
+[moveactor name=Maki pos=normal]
 #Maki
 まっきまっきまー☆[r]
 ちょっと口が悪いけど、[l]
@@ -81,7 +90,7 @@ You can also display options.[p]
 真姫ちゃんですっ！[p]
 Хорошо![p]
 
-[jump target=*select_niko]
+[jump target=*select]
 
 [cm]
 

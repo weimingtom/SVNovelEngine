@@ -51,13 +51,13 @@ namespace Sov.AVGPart
             float z = Settings.Instance.Normal_Z;
             switch (positionZ)
             {
-                case "Far":
+                case "far":
                     z = Settings.Instance.Far_Z;
                     break;
-                case "Near":
+                case "near":
                     z = Settings.Instance.Near_Z;
                     break;
-                case "Normal":
+                case "normal":
                     z = Settings.Instance.Normal_Z;
                     break;
                 default:
@@ -237,6 +237,13 @@ namespace Sov.AVGPart
             if (ao == default(ActorObject))
                 return;
 
+     //     if(ao.IsEnterScene)
+     //     {
+     //          Engine.Status.EnableNextCommand = true;
+     //          Engine.NextCommand();
+     //          return;
+     //     }
+            ao.IsEnterScene = true;
             ao.Go.SetActive(true);
 
             Vector3 pos = ActorTagsUtility.GetActorPosition(Params["pos"],Params["z_pos"]);
@@ -256,6 +263,7 @@ namespace Sov.AVGPart
             else
             {               
                 ao.FadeIn(0);
+                OnFinishAnimation();
             }
         }
 
@@ -263,12 +271,12 @@ namespace Sov.AVGPart
 
         public override void OnFinishAnimation()
         {
-            if (Params["fade"] == "true")
-            {
+          //  if (Params["fade"] == "true")
+          //  {
                 Debug.Log("Finish Animation!");
                 Engine.Status.EnableNextCommand = true;
                 Engine.NextCommand();
-            }
+         //   }
         }
 
         public override void After()
@@ -277,6 +285,88 @@ namespace Sov.AVGPart
         }
     }
 
+    /* 
+     * tag = exitactor
+     * 
+     * <desc>
+     * 立绘淡出
+     * 
+     * <params>
+     * @name:       the name of the actor
+     * @fade:       是否淡出
+     * @fadetime:   淡出时间
+     * 
+     * <sample>
+     * [exitactor name=Sachi fade=true]
+     *
+     */
+    public class ExitactorTag : AbstractTag
+    {
+        public ExitactorTag()
+        {
+            _defaultParamSet = new Dictionary<string, string>() {
+                { "name",    ""         },
+                { "fade",    "true"    },
+                { "fadetime","0.5"      },
+            };
+
+            _vitalParams = new List<string>() {
+                "name",
+            };
+        }
+
+        public override void Excute()
+        {
+            //base.Excute();
+
+            //actor name
+            string actorName = Params["name"];
+
+            Debug.LogFormat("Exit Actor: {0}", actorName);
+
+            //get actor
+            ActorObject ao = ImageManager.Instance.GetCreatedObject<ActorObject>(actorName);
+            if(ao == null)
+            {
+                Debug.LogErrorFormat("Can not find actor to exit:{0}", actorName);
+            }
+            bool isFade = bool.Parse(Params["fade"]);
+
+
+           // ao.OnAnimationFinish = OnFinishAnimation;
+
+            float time = float.Parse(Params["fadetime"]);
+
+            ao.OnAnimationFinish = OnFinishAnimation;
+            ao.IsEnterScene = false;
+            if (isFade == true)
+            {
+                Engine.Status.EnableNextCommand = false;
+                
+                ao.FadeOut(time);
+            }
+            else
+            {
+                ao.FadeOut(0);
+            }
+        }
+
+
+
+        public override void OnFinishAnimation()
+        {
+
+            Debug.Log("Finish Animation!");
+            Engine.Status.EnableNextCommand = true;
+            Engine.NextCommand();
+
+        }
+
+        public override void After()
+        {
+            //base.After();
+        }
+    }
     /* 
      * tag = moveactor
      * 
